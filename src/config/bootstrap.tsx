@@ -1,5 +1,6 @@
 import translationsEN from './locales/en/translations.json';
 import translationsESP from './locales/es/translations.json';
+import {Config} from '../modules/common';
 
 const resources = {
     en: {
@@ -11,6 +12,6 @@ const resources = {
   };
 
 
-export default {
-    i18nResources: resources
-}
+Config.i18nResources = resources;
+
+export default Config;

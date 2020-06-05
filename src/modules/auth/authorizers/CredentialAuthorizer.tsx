@@ -2,6 +2,7 @@ import IAuthorizer from "./IAuthorizer";
 import {Resource} from '../../common';
 import AuthorizeResponse from '../data/authorize.json'
 import AuthorizeError from '../data/authorizeError.json'
+import {Config} from '../../common';
 
 class CredentialsAuthorizer implements IAuthorizer{
     credential: any;
@@ -18,8 +19,8 @@ class CredentialsAuthorizer implements IAuthorizer{
         };
 
         Resource.mockData = AuthorizeError;
-        if(this.credential.user === "cesar" && 
-        this.credential.password === "enter")
+        if(this.credential.user === Config.credential.user && 
+        this.credential.password === Config.credential.password)
         {
             Resource.mockData = AuthorizeResponse;
         }

@@ -24,7 +24,7 @@ class Bootstrap extends React.Component<BootstrapComponentProps, {config: {}, is
         load()
         .then((config) => {
             this.setState({isloading: false, "config": config});
-            this.props.profile.client = config["client"];
+            this.props.profile.client = config.client;
         });
     }
 

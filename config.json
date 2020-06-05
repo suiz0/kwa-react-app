@@ -3,5 +3,9 @@
         "key": "aperture",
         "url": "http://localhost:300/api/aperture"
       }],
-    "client": "Contoso"
+    "client": "Contoso",
+    "credential": {
+      "user": "test",
+      "pasword": "enter"
+    }
 }
