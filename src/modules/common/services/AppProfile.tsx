@@ -1,8 +1,8 @@
 class AppProfile {
     isAuthenticated= false;
     lang= 'en';
-    services:any[]= [];
-    static Resources={}
+    static Resources={};
+    client: string = "";
   }
 
   export default AppProfile;

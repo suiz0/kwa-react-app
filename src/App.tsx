@@ -73,7 +73,7 @@ const App = (props) => {
     <div className="container">
         <Header aria-label="Contoso">
           <HeaderName href="#" prefix="Kwan">
-            [Contoso]
+            [{props.profile.client}]
           </HeaderName>
           <HeaderNavigation aria-label="Kwan [Contoso]">
             <HeaderMenu aria-label={"lang" + props.i18n.language} menuLinkName={"lang(" + lang + ")"}>
