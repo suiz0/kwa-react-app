@@ -35,7 +35,7 @@ const AuthAPIProvider: {instance: null | AuthAPI, create: Function} = {
 }
 
 const GetAuthHeaders = () => {
-    return {"Authorizaton": General.GetItem("auth.apikey")};
+    return {"Authorizaton": "VENAFI" + General.GetItem("auth.apikey")};
 }
 
 // Auth API Service class
