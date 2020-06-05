@@ -10,10 +10,13 @@ export default {
     Resource: Resource,
     Mediator: Mediator,
     GetItem: (key: string): string | null => {
-        return localStorage.getItem(key);
+        return sessionStorage.getItem(key);
     },
     SetItem: (key: string, value: any) => {
-        localStorage.setItem(key, value);
+        sessionStorage.setItem(key, value);
+    },
+    RemoveItem: (key: string) => {
+        sessionStorage.removeItem(key);
     },
     name: "General"
 }

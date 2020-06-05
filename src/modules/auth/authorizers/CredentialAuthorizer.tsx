@@ -18,7 +18,7 @@ class CredentialsAuthorizer implements IAuthorizer{
             type: "post"
         };
 
-        Resource.mockData = AuthorizeError;
+        Resource.mockData = AuthorizeError;console.log(Config);
         if(this.credential.user === Config.credential.user && 
         this.credential.password === Config.credential.password)
         {

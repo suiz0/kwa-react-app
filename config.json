@@ -6,6 +6,6 @@
     "client": "Contoso",
     "credential": {
       "user": "test",
-      "pasword": "enter"
+      "password": "enter"
     }
 }
