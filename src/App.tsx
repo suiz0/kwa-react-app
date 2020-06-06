@@ -81,7 +81,7 @@ const App = (props) => {
             </HeaderMenu>
           </HeaderNavigation>
           <HeaderGlobalBar aria-label="system actions">
-            <HeaderGlobalAction aria-label="admin option" >
+            <HeaderGlobalAction aria-label="admin option" isActive>
               <Components.AdminOption {...props} />
             </HeaderGlobalAction>
           </HeaderGlobalBar>
