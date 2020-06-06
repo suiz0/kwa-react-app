@@ -26,6 +26,7 @@ import General, { withResources } from './modules/common';
 import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import LoginPage from './modules/auth/components/LoginPage';
+import IAuthorizer from './modules/auth/authorizers/IAuthorizer';
 
 
 const App = (props) => {
@@ -43,12 +44,12 @@ const App = (props) => {
       setLang(response.active);
       setLangs(response.languages);
     });
-
+  
     props.auth.getScheme()
     .then((response: AuthScheme) => {
       if(response.IsAuthorizePassword)
       {
-        let authorizer = AuthorizerMaker();
+        let authorizer = AuthorizerMaker();        
         if( !authorizer)
         {
           // user does not have any type of access item
@@ -57,8 +58,17 @@ const App = (props) => {
         else 
         {
           return props.auth.authorize(authorizer)
-          .then(()=>{
-            props.resources["aperture"].sendRequest({url: "/test/headers"})
+          .then((response)=>{
+            if(response.isvalid){
+              //TODO
+            }
+            else{
+              General.RemoveItem(props.token)
+              General.RemoveItem("auth.apikey");
+              General.RemoveItem("auth.expiresat");
+              props.history.push('/login');
+            }
+            //props.resources["aperture"].sendRequest({url: "/test/headers"})
           })
         }
       }

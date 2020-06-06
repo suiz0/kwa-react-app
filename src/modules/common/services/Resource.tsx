@@ -51,6 +51,8 @@ class Resource
             for(let key in options.headers) console.log(key + ":" + options.headers[key]);
         }
     }
+
+    
 }
 
 export default Resource;

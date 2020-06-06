@@ -17,13 +17,15 @@ class CredentialsAuthorizer implements IAuthorizer{
             type: "post"
         };
 
+        
+
         Resource.mockData = AuthorizeError;
         if(this.credential.user === "cesar" && 
         this.credential.password === "enter")
         {
             Resource.mockData = AuthorizeResponse;
         }
-
+        
         console.log("Sending credential login request");
         return this.resource.sendRequest(options);
     }
