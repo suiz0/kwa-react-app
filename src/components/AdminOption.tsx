@@ -5,7 +5,7 @@ import {
   } from "react-router-dom";
 
 const AdminOption = (props) => {
-    return <Link to="/login"><UserAvatarFilled20 /></Link>
+    return <UserAvatarFilled20 />
 }
 
 export default AdminOption;

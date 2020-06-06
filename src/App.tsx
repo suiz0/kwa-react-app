@@ -7,8 +7,10 @@ import {
   HeaderMenu,
   HeaderGlobalBar,
   HeaderGlobalAction,
-  HeaderMenuItem
+  HeaderMenuItem,
 } from "carbon-components-react/lib/components/UIShell";
+
+import {InlineLoading} from 'carbon-components-react';
 
 import {
   BrowserRouter as Router,
@@ -22,15 +24,14 @@ import {withTranslation} from 'react-i18next';
 
 import Components from './components';
 import { AuthScheme, AuthorizerMaker, withAuth} from './modules/auth';
-import General, { withResources } from './modules/common';
+import General, { withResources,AppProfile } from './modules/common';
 import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import LoginPage from './modules/auth/components/LoginPage';
 
-
 const App = (props) => {
-  const [lang, setLang] =  useState(props.lang);
   const [langs, setLangs] = useState([]);
+  const [appProfile , setAppProfile] = useState(props.profile);
 
   useEffect(() => {
     // componentDidMount
@@ -40,7 +41,7 @@ const App = (props) => {
 
     Models.GetLanguage({resource: props.resources["aperture"]})
     .then((response)=> {
-      setLang(response.active);
+      setAppProfile({lang: response.active});
       setLangs(response.languages);
     });
 
@@ -66,8 +67,8 @@ const App = (props) => {
   }, []);
 
   useEffect(() => {
-    I18N.setLang(lang);
-  },[lang]);
+    I18N.setLang(appProfile.lang);
+  },[appProfile.lang]);
 
   return (
     <div className="container">
@@ -76,12 +77,12 @@ const App = (props) => {
             [{props.profile.client}]
           </HeaderName>
           <HeaderNavigation aria-label="Kwan [Contoso]">
-            <HeaderMenu aria-label={"lang" + props.i18n.language} menuLinkName={"lang(" + lang + ")"}>
-              {langs.map((lang, i) => <HeaderMenuItem  key={i} aria-label={lang} onClick={()=>{setLang(lang)}}>{lang}</HeaderMenuItem>)}
+            <HeaderMenu aria-label={"lang" + props.i18n.language} menuLinkName={"lang(" + appProfile.lang + ")"}>
+              {langs.map((lang, i) => <HeaderMenuItem  key={i} aria-label={lang} onClick={()=>{setAppProfile({"lang": lang})}}>{lang}</HeaderMenuItem>)}
             </HeaderMenu>
           </HeaderNavigation>
           <HeaderGlobalBar aria-label="system actions">
-            <HeaderGlobalAction aria-label="admin option" isActive>
+            <HeaderGlobalAction aria-label="admin option" isActive onClick={()=>{ props.history.push('/login')}}> 
               <Components.AdminOption {...props} />
             </HeaderGlobalAction>
           </HeaderGlobalBar>
