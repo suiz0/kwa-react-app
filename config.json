@@ -1,0 +1,11 @@
+{
+    "services": [{ 
+        "key": "aperture",
+        "url": "http://localhost:300/api/aperture"
+      }],
+    "client": "Contoso",
+    "credential": {
+      "user": "test",
+      "password": "enter"
+    }
+}

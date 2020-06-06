@@ -1,13 +1,6 @@
 import translationsEN from './locales/en/translations.json';
 import translationsESP from './locales/es/translations.json';
-import {AppProfile} from '../modules/common';
-
-const services = [
-    { 
-      "key": "aperture",
-      "url": 'http://localhost:300/api/aperture'
-    }
-  ];
+import {Config} from '../modules/common';
 
 const resources = {
     en: {
@@ -19,10 +12,6 @@ const resources = {
   };
 
 
-let profile = new AppProfile();
-profile.services = services;
+Config.i18nResources = resources;
 
-export default {
-    i18nResources: resources,
-    AppProfile: profile
-}
+export default Config;

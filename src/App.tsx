@@ -83,7 +83,7 @@ const App = (props) => {
     <div className="container">
         <Header aria-label="Contoso">
           <HeaderName href="#" prefix="Kwan">
-            [Contoso]
+            [{props.profile.client}]
           </HeaderName>
           <HeaderNavigation aria-label="Kwan [Contoso]">
             <HeaderMenu aria-label={"lang" + props.i18n.language} menuLinkName={"lang(" + lang + ")"}>
@@ -91,7 +91,7 @@ const App = (props) => {
             </HeaderMenu>
           </HeaderNavigation>
           <HeaderGlobalBar aria-label="system actions">
-            <HeaderGlobalAction aria-label="admin option" >
+            <HeaderGlobalAction aria-label="admin option" isActive>
               <Components.AdminOption {...props} />
             </HeaderGlobalAction>
           </HeaderGlobalBar>
