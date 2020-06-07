@@ -47,12 +47,12 @@ class LoginPage extends React.Component<WithTranslation> {
     }
 
     onSend = () => {
-        this.setState({isloading: true});
+        this.setState({isLoading: true});
         if(this.validate()) 
         {
             this.props['auth'].authorize(new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]}))
             .then((authorized) => {
-                this.setState({isloading: false});
+                this.setState({isLoading: false});
                 if(authorized.isvalid)
                 {
                     this.onClose();
@@ -85,6 +85,7 @@ class LoginPage extends React.Component<WithTranslation> {
     modalLabel={this.props.t("Login")}
     onRequestClose={this.onClose}
     onRequestSubmit={this.onSend}
+    primaryButtonDisabled={this.state.isLoading}
     hasForm
     >
         <form ref={this.form}>
