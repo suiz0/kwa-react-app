@@ -7,6 +7,10 @@ class Resource
 
     static timeout: number = 1000;
     static mockData:any;
+    static interceptors = {
+        request: ()=>{},
+        response: ()=>{}
+    };
 
     constructor(options)
     {
@@ -20,7 +24,6 @@ class Resource
 
     sendRequest(options): Promise<any>
     {
-        let timeout = options && options.timeout? options.timeout:1000;
         let customHeaders = this.GetHeadersHandler();
 
         if(!options.type) options.type = "GET";
@@ -31,13 +34,15 @@ class Resource
             options.headers = Object.assign(options.headers, customHeaders);
         }
 
+        Resource.interceptors.request();
         let promise = new Promise((resolve, reject) => {
             // Clousure
             let mockData = Resource.mockData;
             this.logRequest(options);
             setTimeout(() => {
+                Resource.interceptors.response();
                 resolve(mockData);
-            }, timeout);
+            }, Resource.timeout);
         });
 
         return promise;

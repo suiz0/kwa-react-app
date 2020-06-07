@@ -24,14 +24,23 @@ import {withTranslation} from 'react-i18next';
 
 import Components from './components';
 import { AuthScheme, AuthorizerMaker, withAuth} from './modules/auth';
-import General, { withResources,AppProfile } from './modules/common';
+import General, { withResources,AppProfile, Resource } from './modules/common';
 import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import LoginPage from './modules/auth/components/LoginPage';
 
 const App = (props) => {
   const [langs, setLangs] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [appProfile , setAppProfile] = useState(props.profile);
+
+  Resource.interceptors.request = () => {
+    setIsLoading(true);
+  };
+
+  Resource.interceptors.response = () =>{
+    setIsLoading(false);
+  }
 
   useEffect(() => {
     // componentDidMount
@@ -72,6 +81,7 @@ const App = (props) => {
 
   return (
     <div className="container">
+        { isLoading? <InlineLoading className="bx--inline-loading--top-fixed" description={props.t('loading...')} /> : ""}
         <Header aria-label="Contoso">
           <HeaderName href="#" prefix="Kwan">
             [{props.profile.client}]
