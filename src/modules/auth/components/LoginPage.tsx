@@ -32,12 +32,12 @@ class LoginPage extends React.Component<WithTranslation> {
     {
         let ctrl: any;
         let isValid = true;
-        let validationErrors = {};
+        const validationErrors = {};
         for(ctrl in this.form.current)
         {
             if(this.form.current[ctrl] && this.form.current[ctrl].nodeName && this.form.current[ctrl].nodeName === "INPUT")
                 if(!this.form.current[ctrl].checkValidity()) {
-                    let ctrlID = this.form.current[ctrl].id;
+                    const ctrlID = this.form.current[ctrl].id;
                     validationErrors[ctrlID] = "Invalid";
                     this.setState({"validationErrors": validationErrors})
                     isValid = false;

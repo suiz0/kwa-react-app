@@ -10,14 +10,17 @@ import {AppProfile} from '../../common';
 
 // Factory Method
 const AuthorizerMaker = (): IAuthorizer | null => {
+    General.SetItem('token', 'hardtoken'); //REMOVE THIS LATER
+    General.RemoveItem('auth.apikey'); //REMOVE THIS LATER
     switch(true) {
         case General.GetItem('auth.apikey') != null:
             return new KeyAuthorizer({key: General.GetItem('auth.apikey'), resource: AppProfile.Resources[AuthConfig.servicekey]});
             break;
-
         case General.GetItem('token') != null:
             return new TokenAuthorizer({token:General.GetItem('token'), resource: AppProfile.Resources[AuthConfig.servicekey]});
             break;
+        default:
+            return null;
     }
 
     return null;
@@ -68,8 +71,11 @@ class AuthAPI
             if(response.isvalid) {
                 General.SetItem("auth.apikey", response.key);
                 General.SetItem("auth.expiresat", response.expiresat);
-                console.log("Applying Auth Headers for subsequent requests")
-                this.resource.setGetHeaders(GetAuthHeaders);
+                console.log("Applying Auth Headers for subsequent requests");
+                this.resource.setGetHeaders(GetAuthHeaders);                 
+            }else{
+                console.log('Invalid Response');   
+
             }
             return response;
         })

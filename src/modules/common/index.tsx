@@ -17,6 +17,5 @@ export default {
     },
     RemoveItem: (key: string) => {
         sessionStorage.removeItem(key);
-    },
-    name: "General"
+    }
 }
