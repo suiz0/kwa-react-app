@@ -8,14 +8,15 @@ interface BootstrapComponentProps {
     config: {}
 }
 
-class Bootstrap extends React.Component<BootstrapComponentProps, {config: {}, isloading: boolean}>
+class Bootstrap extends React.Component<BootstrapComponentProps, {config: {}, isloading: boolean, profile: AppProfile}>
 {
     constructor(props)
     {
         super(props);
         this.state = {
             config: this.props.config,
-            isloading: true
+            isloading: true,
+            profile: this.props.profile
         };
     }
 
@@ -24,14 +25,14 @@ class Bootstrap extends React.Component<BootstrapComponentProps, {config: {}, is
         load()
         .then((config) => {
             this.setState({isloading: false, "config": config});
-            this.props.profile.client = config.client;
+            this.state.profile.client = config.client;
         });
     }
 
     render()
     {
         if(!this.state.isloading)
-            return this.props.ready({config:this.state.config, profile: this.props.profile});
+            return this.props.ready({config:this.state.config, profile: this.state.profile});
 
         return <div>Loading...</div>;
     }
