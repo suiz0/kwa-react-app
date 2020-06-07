@@ -63,7 +63,7 @@ class LoginPage extends React.Component<WithTranslation> {
             });
         }
         else{
-
+            this.setState({isLoading: false});
         }
     }
 
