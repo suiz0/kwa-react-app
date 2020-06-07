@@ -5,6 +5,7 @@ import {withTranslation, WithTranslation} from 'react-i18next';
 import AuthAPI, {AuthAPIProvider} from '../services/AuthAPI';
 import CredentialsAuthorizer from '../authorizers/CredentialAuthorizer';
 import AuthConfig from '../services/AuthConfig';
+import { threadId } from 'worker_threads';
 
 
 class LoginPage extends React.Component<WithTranslation> {
@@ -22,6 +23,8 @@ class LoginPage extends React.Component<WithTranslation> {
     {
         super(props);
         this.form = React.createRef();
+
+        this.resetValidationError = this.resetValidationError.bind(this);
     }
 
     onClose = () => {
@@ -67,6 +70,17 @@ class LoginPage extends React.Component<WithTranslation> {
         }
     }
 
+    resetValidationError(ev)
+    {
+        let errors = 
+        {
+            ...this.state.validationErrors,
+            [ev.target.id]:null
+        };
+
+        this.setState({"validationErrors": errors});
+    }
+
     setUser = (ev) => {
         this.setState({user: ev.target.value});
     }
@@ -97,17 +111,19 @@ class LoginPage extends React.Component<WithTranslation> {
                     labelText={this.props.t("Username") as string}
                     placeholder={this.props.t("Enter your username")}
                     onChange= {this.setUser}
+                    onFocus={this.resetValidationError}
                 />
             
                 <TextInput
                     id="password"
-                    invalid={this.state.validationErrors["user"]? true: false}
+                    invalid={this.state.validationErrors["password"]? true: false}
                     required
                     invalidText={this.props.t("Invalid password.")}
                     labelText={this.props.t("Password") as string}
                     placeholder={this.props.t("Enter your password")}
                     type="password"
                     onChange={this.setPassword}
+                    onFocus={this.resetValidationError}
                 />
         </form>
    </Modal>
