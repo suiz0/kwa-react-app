@@ -27,7 +27,7 @@ import { AuthScheme, AuthorizerMaker, withAuth} from './modules/auth';
 import General, { withResources,AppProfile, Resource } from './modules/common';
 import Models, {Language} from './models';
 import I18N from './modules/i18n';
-import LoginPage from './modules/auth/components/LoginPage';
+import AuthorizePassword from './modules/authorize-password/';
 import IAuthorizer from './modules/auth/authorizers/IAuthorizer';
 //REDUX 
 import {useDispatch} from 'react-redux'
@@ -64,7 +64,7 @@ const App = (props:any) => {
     .then((response: AuthScheme) => {
       if(response.IsAuthorizePassword)
       {
-        const authorizer = AuthorizerMaker();        
+        const authorizer = AuthorizerMaker();
         if( !authorizer)
         {
           // user does not have any type of access item
@@ -75,7 +75,7 @@ const App = (props:any) => {
           return props.auth.authorize(authorizer)
           .then(()=>{        
             _handleAuth();
-            props.history.push('/login');    
+            props.history.push('/login');
             //props.resources["aperture"].sendRequest({url: "/test/headers"})
           })
         }
@@ -115,7 +115,7 @@ const App = (props:any) => {
             <Components.HomePage {...props} />
           </Route>
           <Route path="/login">
-            <LoginPage {...props}/>
+            <AuthorizePassword.LoginPage {...props}/>
           </Route>
         </Switch>
         </Content>
