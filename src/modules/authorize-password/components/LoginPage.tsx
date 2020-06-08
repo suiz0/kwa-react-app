@@ -1,12 +1,12 @@
 import React from 'react';
-import General, {AppProfile} from '../../common';
-import { Modal, Form, TextInput } from 'carbon-components-react';
+import General, {AppProfile, Config} from '../../common';
+import { Modal, Form, TextInput, InlineNotification } from 'carbon-components-react';
 import {withTranslation, WithTranslation} from 'react-i18next';
 import AuthAPI, {AuthAPIProvider} from '../../auth/services/AuthAPI';
 import CredentialsAuthorizer from '../authorizers/CredentialAuthorizer';
 import AuthConfig from '../../auth/services/AuthConfig';
 import { threadId } from 'worker_threads';
-import store from '../../../store/store'
+import store from '../../../store/store';
 
 
 class LoginPage extends React.Component<WithTranslation> {
@@ -107,6 +107,12 @@ class LoginPage extends React.Component<WithTranslation> {
     primaryButtonDisabled={this.state.isLoading}
     hasForm
     >
+         <InlineNotification
+        hideCloseButton={true}
+        iconDescription="describes the close button"
+        kind="info"
+        subtitle={this.props.t('User') + ": " + Config.credential.user + ' ' + this.props.t('Password') + ": " + Config.credential.password}
+        title="Usage:" />
         <form ref={this.form}>
                 <TextInput
                     id="user"
