@@ -5,4 +5,4 @@ class AppProfile {
     client: string = "";
   }
 
-  export default AppProfile;
+export default AppProfile;
