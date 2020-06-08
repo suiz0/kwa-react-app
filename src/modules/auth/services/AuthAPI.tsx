@@ -36,10 +36,11 @@ const AuthAPIProvider: {instance: null | AuthAPI, create: Function} = {
         return this.instance;
     }
 }
-
-const GetAuthHeaders = () => {
+ const GetAuthHeaders = () => {
     return {"Authorizaton": "VENAFI" + General.GetItem("auth.apikey")};
 }
+
+
 
 // Auth API Service class
 class AuthAPI
@@ -63,19 +64,24 @@ class AuthAPI
         return this.resource.sendRequest(opts);
     }
 
+
+
     // Validate current session
-    public authorize(authorizer: IAuthorizer)
+    public authorize(authorizer: IAuthorizer) 
     {
         return authorizer.authorize()
         .then((response)=> {
             if(response.isvalid) {
+                General.RemoveItem("token")
                 General.SetItem("auth.apikey", response.key);
                 General.SetItem("auth.expiresat", response.expiresat);
                 console.log("Applying Auth Headers for subsequent requests");
-                this.resource.setGetHeaders(GetAuthHeaders);                 
+                this.resource.setGetHeaders(GetAuthHeaders);            
             }else{
                 console.log('Invalid Response');   
-
+                General.RemoveItem("token")
+                General.RemoveItem("auth.apikey");
+                General.RemoveItem("auth.expiresat");
             }
             return response;
         })
@@ -85,5 +91,5 @@ class AuthAPI
     }
 }
 
-export {AuthorizerMaker, AuthAPIProvider}
+export {AuthorizerMaker, AuthAPIProvider, GetAuthHeaders}
 export default AuthAPI;

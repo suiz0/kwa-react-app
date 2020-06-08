@@ -27,6 +27,7 @@ class TokenAuthorizer implements IAuthorizer {
         };
 
         Resource.mockData = AuthorizeResponse;
+        this.resource.setGetHeaders(this.GetTokenHeaders);
         return this.resource.sendRequest(options);
     }
 

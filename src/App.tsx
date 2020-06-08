@@ -29,11 +29,15 @@ import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import LoginPage from './modules/auth/components/LoginPage';
 import IAuthorizer from './modules/auth/authorizers/IAuthorizer';
+//REDUX 
+import {useDispatch} from 'react-redux'
+import {RemoveAuthentication} from './modules/auth/actions/AuthActions';
 
-const App = (props) => {
+const App = (props:any) => {
   const [langs, setLangs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [appProfile , setAppProfile] = useState(props.profile);
+  const dispatch = useDispatch()
 
   Resource.interceptors.request = () => {
     setIsLoading(true);
@@ -54,12 +58,13 @@ const App = (props) => {
       setAppProfile({lang: response.active});
       setLangs(response.languages);
     });
-  
+    console.log(props);
+
     props.auth.getScheme()
     .then((response: AuthScheme) => {
       if(response.IsAuthorizePassword)
       {
-        let authorizer = AuthorizerMaker();        
+        const authorizer = AuthorizerMaker();        
         if( !authorizer)
         {
           // user does not have any type of access item
@@ -68,16 +73,9 @@ const App = (props) => {
         else 
         {
           return props.auth.authorize(authorizer)
-          .then((response)=>{
-            if(response.isvalid){
-              //TODO
-            }
-            else{
-              General.RemoveItem(props.token)
-              General.RemoveItem("auth.apikey");
-              General.RemoveItem("auth.expiresat");
-              props.history.push('/login');
-            }
+          .then(()=>{        
+            _handleAuth();
+            props.history.push('/login');    
             //props.resources["aperture"].sendRequest({url: "/test/headers"})
           })
         }
@@ -88,6 +86,10 @@ const App = (props) => {
   useEffect(() => {
     I18N.setLang(appProfile.lang);
   },[appProfile.lang]);
+
+  const _handleAuth = () => {
+    dispatch(RemoveAuthentication())
+  }
 
   return (
     <div className="container">
