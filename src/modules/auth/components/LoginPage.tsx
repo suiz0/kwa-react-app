@@ -5,11 +5,13 @@ import {withTranslation, WithTranslation} from 'react-i18next';
 import AuthAPI, {AuthAPIProvider} from '../services/AuthAPI';
 import CredentialsAuthorizer from '../authorizers/CredentialAuthorizer';
 import AuthConfig from '../services/AuthConfig';
+import store from '../../../store/store'
 
 
 class LoginPage extends React.Component<WithTranslation> {
 
     form;
+    authRequired;
 
     state = {
         user: '',
@@ -21,7 +23,8 @@ class LoginPage extends React.Component<WithTranslation> {
     constructor(props)
     {
         super(props);
-        this.form = React.createRef();
+        this.form = React.createRef();    
+        this.authRequired = store.getState().authUser.requestAuthentication;    
     }
 
     onClose = () => {
@@ -78,6 +81,9 @@ class LoginPage extends React.Component<WithTranslation> {
     render()
     {
         return (
+            <div>
+                {
+                this.authRequired&&
             <Modal open 
     primaryButtonText={this.props.t("Send")}
     secondaryButtonText={this.props.t("Cancel")}
@@ -110,6 +116,8 @@ class LoginPage extends React.Component<WithTranslation> {
                 />
         </form>
    </Modal>
+   }
+   </div>
         )
     }
 }
