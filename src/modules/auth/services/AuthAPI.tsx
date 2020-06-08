@@ -1,5 +1,6 @@
 import General from '../../common';
 import scheme from '../data/scheme.json';
+import platformSettings from '../data/platformsettings.json';
 import AuthScheme from '../models/IAuthScheme';
 import IAuthorizer from '../authorizers/IAuthorizer';
 import TokenAuthorizer from '../authorizers/TokenAuthorizer';
@@ -12,6 +13,7 @@ import {AppProfile} from '../../common';
 const AuthorizerMaker = (): IAuthorizer | null => {
     General.SetItem('token', 'hardtoken'); //REMOVE THIS LATER
     General.RemoveItem('auth.apikey'); //REMOVE THIS LATER
+    //General.RemoveItem('token'); //REMOVE THIS LATER
     switch(true) {
         case General.GetItem('auth.apikey') != null:
             return new KeyAuthorizer({key: General.GetItem('auth.apikey'), resource: AppProfile.Resources[AuthConfig.servicekey]});
@@ -61,6 +63,17 @@ class AuthAPI
         opts.type="get";
         opts.url = "/authorizationplugin/";
         General.Resource.mockData = scheme;
+        return this.resource.sendRequest(opts);
+    }
+
+    getPlatformSettings(options?): Promise<any> {
+        let opts = Object.assign({}, options||{});
+
+        if(this.resource===null) this.resource = AppProfile.Resources[AuthConfig.servicekey];
+
+        opts.type="get";
+        opts.url = "/platformsettings/";
+        General.Resource.mockData = platformSettings;
         return this.resource.sendRequest(opts);
     }
 

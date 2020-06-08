@@ -23,21 +23,23 @@ import {
 import {withTranslation} from 'react-i18next';
 
 import Components from './components';
-import { AuthScheme, AuthorizerMaker, withAuth} from './modules/auth';
+import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI} from './modules/auth';
 import General, { withResources,AppProfile, Resource } from './modules/common';
 import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import LoginPage from './modules/auth/components/LoginPage';
 import IAuthorizer from './modules/auth/authorizers/IAuthorizer';
 //REDUX 
-import {useDispatch} from 'react-redux'
-import {RemoveAuthentication} from './modules/auth/actions/AuthActions';
+import {useDispatch} from 'react-redux';
+import {RemoveAuthentication, SetExpirationTimeout, getCurrentSchema} from './modules/auth/actions/AuthActions';
+import store from './store/store';
 
 const App = (props:any) => {
   const [langs, setLangs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [appProfile , setAppProfile] = useState(props.profile);
   const dispatch = useDispatch()
+
 
   Resource.interceptors.request = () => {
     setIsLoading(true);
@@ -58,39 +60,17 @@ const App = (props:any) => {
       setAppProfile({lang: response.active});
       setLangs(response.languages);
     });
-    console.log(props);
-
-    props.auth.getScheme()
-    .then((response: AuthScheme) => {
-      if(response.IsAuthorizePassword)
-      {
-        const authorizer = AuthorizerMaker();        
-        if( !authorizer)
-        {
-          // user does not have any type of access item
-          props.history.push('/login');
-        } 
-        else 
-        {
-          return props.auth.authorize(authorizer)
-          .then(()=>{        
-            _handleAuth();
-            props.history.push('/login');    
-            //props.resources["aperture"].sendRequest({url: "/test/headers"})
-          })
-        }
-      }
-    });
+    _getSchema(props.auth, props.resource, props.history);
   }, []);
 
   useEffect(() => {
     I18N.setLang(appProfile.lang);
   },[appProfile.lang]);
 
-  const _handleAuth = () => {
-    dispatch(RemoveAuthentication())
-  }
 
+  const _getSchema =(auth:AuthAPI, resource:Resource, history:any) =>{
+   dispatch(getCurrentSchema(auth, resource, history))
+  }
   return (
     <div className="container">
         { isLoading? <InlineLoading className="bx--inline-loading--top-fixed" description={props.t('loading...')} /> : ""}
