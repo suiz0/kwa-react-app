@@ -4,8 +4,9 @@ import withResources from './components/WithResources';
 import Bootstrap from './components/Bootstrap';
 import AppProfile from './services/AppProfile';
 import Config, {load} from './services/Config';
+import AppProfileReducer from './reducers/AppProfileReducer';
 
-export { Mediator, Resource , withResources, AppProfile, Config, load, Bootstrap};
+export { Mediator, Resource , withResources, AppProfile, Config, load, Bootstrap, AppProfileReducer};
 export default {
     Resource: Resource,
     Mediator: Mediator,

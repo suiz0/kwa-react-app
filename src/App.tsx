@@ -27,18 +27,17 @@ import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI} from './modules/auth';
 import General, { withResources,AppProfile, Resource } from './modules/common';
 import Models, {Language} from './models';
 import I18N from './modules/i18n';
-import LoginPage from './modules/auth/components/LoginPage';
-import IAuthorizer from './modules/auth/authorizers/IAuthorizer';
+import AuthorizePassword from './modules/authorize-password/';
 //REDUX 
 import {useDispatch} from 'react-redux';
-import {RemoveAuthentication, SetExpirationTimeout, getCurrentSchema} from './modules/auth/actions/AuthActions';
-import store from './store/store';
+import {getCurrentSchema} from './modules/auth/actions/AuthActions';
+import ProfileActions from './store/actions/profile.actions';
+import { connect } from "react-redux";
 
 const App = (props:any) => {
-  const [langs, setLangs] = useState([]);
+  const [langs, setLangs] = useState(props.profile.langs || []);
+  //const [lang, setLang] = useState(props.profile.lang);
   const [isLoading, setIsLoading] = useState(false);
-  const [appProfile , setAppProfile] = useState(props.profile);
-  const dispatch = useDispatch()
 
 
   Resource.interceptors.request = () => {
@@ -57,30 +56,32 @@ const App = (props:any) => {
 
     Models.GetLanguage({resource: props.resources["aperture"]})
     .then((response)=> {
-      setAppProfile({lang: response.active});
+      props.dispatch(ProfileActions.setLang(response.active));
+      I18N.setLang(props.profile.lang);
       setLangs(response.languages);
     });
     _getSchema(props.auth, props.resource, props.history);
   }, []);
 
   useEffect(() => {
-    I18N.setLang(appProfile.lang);
-  },[appProfile.lang]);
+    I18N.setLang(props.profile.lang);
+  },[props.profile.lang]);
 
 
   const _getSchema =(auth:AuthAPI, resource:Resource, history:any) =>{
-   dispatch(getCurrentSchema(auth, resource, history))
+   props.dispatch(getCurrentSchema(auth, resource, history))
   }
+
   return (
     <div className="container">
         { isLoading? <InlineLoading className="bx--inline-loading--top-fixed" description={props.t('loading...')} /> : ""}
-        <Header aria-label="Contoso">
+        <Header aria-label={props.client}>
           <HeaderName href="#" prefix="Kwan">
-            [{props.profile.client}]
+            [{props.client}]
           </HeaderName>
           <HeaderNavigation aria-label="Kwan [Contoso]">
-            <HeaderMenu aria-label={"lang" + props.i18n.language} menuLinkName={"lang(" + appProfile.lang + ")"}>
-              {langs.map((lang, i) => <HeaderMenuItem  key={i} aria-label={lang} onClick={()=>{setAppProfile({"lang": lang})}}>{lang}</HeaderMenuItem>)}
+            <HeaderMenu aria-label={"lang" + props.i18n.language} menuLinkName={"lang(" + props.profile.lang + ")"}>
+              {langs.map((lang, i) => <HeaderMenuItem  key={i} aria-label={lang} onClick={()=>{props.dispatch(ProfileActions.setLang(lang))}}>{lang}</HeaderMenuItem>)}
             </HeaderMenu>
           </HeaderNavigation>
           <HeaderGlobalBar aria-label="system actions">
@@ -95,7 +96,7 @@ const App = (props:any) => {
             <Components.HomePage {...props} />
           </Route>
           <Route path="/login">
-            <LoginPage {...props}/>
+            <AuthorizePassword.LoginPage {...props}/>
           </Route>
         </Switch>
         </Content>
@@ -113,4 +114,11 @@ const AppContainer = (props) => {
     </Router>
 }
 
-export default withTranslation()(AppContainer);
+//Connect app to the store(AppProfile)
+const mapStateToProps = state => {
+  return {
+    profile: state.AppProfile
+  };
+};
+
+export default connect(mapStateToProps)(withTranslation()(AppContainer));
