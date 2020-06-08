@@ -1,6 +1,7 @@
 import IAuthorizer from "./IAuthorizer";
 import { Resource } from "../../common";
 import AuthorizeResponse from '../data/authorize.json'
+import GetAuthHeaders from '../services/AuthAPI'
 
 class KeyAuthorizer implements IAuthorizer {
     key;
@@ -19,6 +20,8 @@ class KeyAuthorizer implements IAuthorizer {
         };
 
         Resource.mockData = AuthorizeResponse;
+        //Added VENAFI headers for subsequent request
+        this.resource.setGetHeaders(GetAuthHeaders);
         return this.resource.sendRequest(options);
     }
     
