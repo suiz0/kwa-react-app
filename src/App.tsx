@@ -45,10 +45,6 @@ const App = (props:any) => {
 
   useEffect(() => {
     // componentDidMount
-    General.Mediator.subscribe("auth:login:close", () => {
-      props.history.push('/');
-    });
- 
     // Get terminology
     props.dispatch(ProfileActions.getLangs(props.resources["aperture"]));
     

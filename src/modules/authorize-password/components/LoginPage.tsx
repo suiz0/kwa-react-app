@@ -34,7 +34,7 @@ class LoginPage extends React.Component<WithTranslation & any> {
     }
 
     onClose = () => {
-        General.Mediator.publish("auth:login:close");
+        this.props.history.push('/');
     }
 
     validate()
@@ -62,7 +62,7 @@ class LoginPage extends React.Component<WithTranslation & any> {
             this.props.dispatch(Authorize_Password(this.props.history, new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]})));
             setTimeout(()=>{
                 this.setState({isLoading: false});
-            }, 1000);
+            }, 1200);
         }
         else{
             this.setState({isLoading: false});
