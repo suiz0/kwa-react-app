@@ -1,4 +1,5 @@
 import profile from '../services/AppProfile';
+import {authConstants} from '../../../data/constants';
 
 let initialState = new profile();
 
@@ -27,6 +28,12 @@ export default (state, action) => {
             };
             break;
 
+        case authConstants.ADD_REQUEST_VALIDATION:
+            newState = {
+                ...state,
+                goto: '/login'
+            }
+            break;
         case "STOP_LOADING":
             newState = {
                 ...state,
@@ -35,6 +42,7 @@ export default (state, action) => {
             break;
         default:
             newState= !state ? initialState: state;
+
     }
 
     return newState;

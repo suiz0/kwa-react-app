@@ -10,7 +10,12 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) =
                 response => { 
                     if(response.IsAuthorizePassword){
                         dispatch({type: authConstants.SET_AUTHORIZE_PASSWORD_SCHEME});
-                        dispatch(Authorize_Password(history));
+                        let authorizer = AuthorizerMaker();
+
+                        if(!authorizer)
+                        {
+                            dispatch(RequestAuthentication());
+                        }
                     }
                 }
             );
@@ -20,7 +25,7 @@ export const Authorize_Password = (history:any, authorizer?) => async(dispatch: 
 {
     let auth = AuthAPIProvider.create();
 
-    if(!authorizer) {
+   /* if(!authorizer) {
         const authorizer = AuthorizerMaker();
         if( !authorizer)
         {
@@ -31,7 +36,7 @@ export const Authorize_Password = (history:any, authorizer?) => async(dispatch: 
         }
     }
     else 
-    {
+    {*/
         auth.authorize(authorizer)
         .then(
         response =>{
@@ -51,7 +56,7 @@ export const Authorize_Password = (history:any, authorizer?) => async(dispatch: 
             }
         }
         );
-    }
+    //}
 }
 
 export const SetValidApiKey = (expireTime) => async(dispatch: any)=>
