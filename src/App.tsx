@@ -23,24 +23,20 @@ import {
 import {withTranslation} from 'react-i18next';
 
 import Components from './components';
-import { AuthScheme, AuthorizerMaker, withAuth} from './modules/auth';
+import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI} from './modules/auth';
 import General, { withResources,AppProfile, Resource } from './modules/common';
 import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import AuthorizePassword from './modules/authorize-password/';
-import IAuthorizer from './modules/auth/authorizers/IAuthorizer';
 //REDUX 
-import {RemoveAuthentication} from './modules/auth/actions/AuthActions';
+import {getCurrentSchema} from './modules/auth/actions/AuthActions';
 import ProfileActions from './store/actions/profile.actions';
 import { connect } from "react-redux";
 
 const App = (props:any) => {
+
   Resource.interceptors.request = ()=> {
     props.dispatch(ProfileActions.startLoading);
-  }
-
-  Resource.interceptors.response = () => {
-    props.dispatch(ProfileActions.stopLoading);
   }
 
   useEffect(() => {
@@ -48,38 +44,21 @@ const App = (props:any) => {
     General.Mediator.subscribe("auth:login:close", () => {
       props.history.push('/');
     });
-
+ 
     // Get terminology
     props.dispatch(ProfileActions.getLangs(props.resources["aperture"]));
-    props.auth.getScheme()
-    .then((response: AuthScheme) => {
-      if(response.IsAuthorizePassword)
-      {
-        const authorizer = AuthorizerMaker();
-        if( !authorizer)
-        {
-          // user does not have any type of access item
-          props.history.push('/login');
-        } 
-        else 
-        {
-          return props.auth.authorize(authorizer)
-          .then(()=>{        
-            _handleAuth();
-            props.history.push('/login');
-            //props.resources["aperture"].sendRequest({url: "/test/headers"})
-          })
-        }
-      }
-    });
+    
+    _getSchema(props.auth, props.resources["aperture"], props.history);
+    
   }, []);
   
   useEffect(() => {
     I18N.setLang(props.profile.lang);
   },[props.profile.lang]);
 
-  const _handleAuth = () => {
-    props.dispatch(RemoveAuthentication())
+
+  const _getSchema =(auth:AuthAPI, resource:Resource, history:any) =>{
+   props.dispatch(getCurrentSchema(auth, resource, history));
   }
 
   return (
