@@ -22,7 +22,6 @@ class LoginPage extends React.Component<WithTranslation & any> {
     constructor(props)
     {
         super(props);
-        console.log(props);
         this.form = React.createRef();
 
         this.resetValidationError = this.resetValidationError.bind(this);
@@ -32,9 +31,6 @@ class LoginPage extends React.Component<WithTranslation & any> {
     {
         if(this.props.authUser.authenticated) // this might change but for now is ok
             this.props.history.push('/');
-        
-        if(this.state.isLoading)
-            this.setState({isLoading: false});
     }
 
     onClose = () => {
@@ -64,6 +60,9 @@ class LoginPage extends React.Component<WithTranslation & any> {
         if(this.validate()) 
         {
             this.props.dispatch(Authorize_Password(this.props.history, new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]})));
+            setTimeout(()=>{
+                this.setState({isLoading: false});
+            }, 1000);
         }
         else{
             this.setState({isLoading: false});
