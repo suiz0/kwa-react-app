@@ -27,7 +27,7 @@ class Resource
     }
 
     sendRequest(options): Promise<any>
-    {       
+    {
         let customHeaders = this.GetHeadersHandler;
 
         if(!options.type) options.type = "GET";
@@ -45,12 +45,9 @@ class Resource
             this.logRequest(options);
             setTimeout(() => {
                 Resource.interceptors.response();
-                try{
-                    Resource.interceptors.validateExpiration();
-                }
-                catch(e){
-                    console.log(e);
-                }
+                
+                Resource.interceptors.validateExpiration()
+               
                 resolve(mockData);
             }, Resource.timeout);
         });

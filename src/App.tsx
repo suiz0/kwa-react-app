@@ -39,6 +39,10 @@ const App = (props:any) => {
     props.dispatch(ProfileActions.startLoading);
   }
 
+  Resource.interceptors.response = ()=> {
+    props.dispatch(ProfileActions.stopLoading);
+  }
+
   useEffect(() => {
     // componentDidMount
     General.Mediator.subscribe("auth:login:close", () => {
@@ -56,6 +60,9 @@ const App = (props:any) => {
     I18N.setLang(props.profile.lang);
   },[props.profile.lang]);
 
+  useEffect(() => {
+    props.history.push(props.profile.goto);
+  },[props.profile.goto]);
 
   const _getSchema =(auth:AuthAPI, resource:Resource, history:any) =>{
    props.dispatch(getCurrentSchema(auth, resource, history));
@@ -109,7 +116,7 @@ const mapStateToProps = state => {
   return {
     profile: state.AppProfile,
     langs: state.AppProfile.langs,
-    userAuth: state.AuthUser
+    authUser: state.AuthUser
   };
 };
 

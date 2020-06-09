@@ -52,7 +52,18 @@ class AuthAPI
     {
         this.resource = props? props.resource:null;
     }
-    
+
+    isValidKey() {
+        // Read key from storage and validate it
+        let valid = true;
+
+        if(valid) return Promise.resolve();
+        return Promise.reject(true);
+    }
+
+    send(options) {
+        return this.resource.sendRequest(options);
+    }
 
     // Get Auth Scheme
     getScheme(options?): Promise<AuthScheme> {
@@ -82,6 +93,16 @@ class AuthAPI
     public authorize(authorizer: IAuthorizer) 
     {
         return authorizer.authorize()
+        .then((response)=>{
+            General.RemoveItem("token")
+            General.SetItem("auth.apikey", response.key);
+            General.SetItem("auth.expiresat", response.expiresat);
+
+            console.log("Applying Auth Headers for subsequent requests");
+            this.resource.setGetHeaders(GetAuthHeaders());
+
+            return response;
+        })
         .catch((response) => {
             return {isValid: false, message: response.message};
         });

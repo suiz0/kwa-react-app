@@ -5,11 +5,9 @@ import {withTranslation, WithTranslation} from 'react-i18next';
 import AuthAPI, {AuthAPIProvider} from '../../auth/services/AuthAPI';
 import CredentialsAuthorizer from '../authorizers/CredentialAuthorizer';
 import AuthConfig from '../../auth/services/AuthConfig';
-import { threadId } from 'worker_threads';
-import store from '../../../store/store';
+import {Authorize_Password} from '../../auth/actions/AuthActions';
 
-
-class LoginPage extends React.Component<WithTranslation> {
+class LoginPage extends React.Component<WithTranslation & any> {
 
     form;
     authRequired;
@@ -27,7 +25,12 @@ class LoginPage extends React.Component<WithTranslation> {
         this.form = React.createRef();
 
         this.resetValidationError = this.resetValidationError.bind(this);
-        this.authRequired = store.getState().authUser.requestAuthentication;    
+    }
+
+    componentDidUpdate(prevProps)
+    {
+        if(this.props.authUser.authenticated) // this might change but for now is ok
+            this.props.history.push('/');
     }
 
     onClose = () => {
@@ -56,17 +59,10 @@ class LoginPage extends React.Component<WithTranslation> {
         this.setState({isLoading: true});
         if(this.validate()) 
         {
-            this.props['auth'].authorize(new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]}))
-            .then((authorized) => {
+            this.props.dispatch(Authorize_Password(this.props.history, new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]})));
+            setTimeout(()=>{
                 this.setState({isLoading: false});
-                if(authorized.isvalid)
-                {
-                    this.onClose();
-                }
-                else{
-                    console.log("Error authenticating");
-                }
-            });
+            }, 1000);
         }
         else{
             this.setState({isLoading: false});
