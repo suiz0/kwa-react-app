@@ -39,6 +39,10 @@ const App = (props:any) => {
     props.dispatch(ProfileActions.startLoading);
   }
 
+  Resource.interceptors.response = ()=> {
+    props.dispatch(ProfileActions.stopLoading);
+  }
+
   useEffect(() => {
     // componentDidMount
     General.Mediator.subscribe("auth:login:close", () => {
