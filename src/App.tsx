@@ -60,7 +60,6 @@ const App = (props:any) => {
     I18N.setLang(props.profile.lang);
   },[props.profile.lang]);
 
-
   const _getSchema =(auth:AuthAPI, resource:Resource, history:any) =>{
    props.dispatch(getCurrentSchema(auth, resource, history));
   }
@@ -111,7 +110,8 @@ const AppContainer = (props) => {
 const mapStateToProps = state => {
   return {
     profile: state.AppProfile,
-    langs: state.AppProfile.langs
+    langs: state.AppProfile.langs,
+    authUser: state.AuthUser
   };
 };
 

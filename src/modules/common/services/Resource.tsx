@@ -27,7 +27,7 @@ class Resource
 
     sendRequest(options): Promise<any>
     {
-        const {isValidKey, authenticated, expireTimeout} = store.getState().authUser;
+       /* const {isValidKey, authenticated, expireTimeout} = store.getState().authUser;
         if(isValidKey && authenticated){
             if(Date.now() > expireTimeout){
                 store.dispatch(RequestAuthentication);
@@ -43,7 +43,7 @@ class Resource
                 store.dispatch(IncreaseExpirationTimeout);
             }
               
-        }
+        }*/
         let customHeaders = this.GetHeadersHandler;
 
         if(!options.type) options.type = "GET";

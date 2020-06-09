@@ -1,5 +1,5 @@
 import { authConstants } from '../../../data/constants';
-import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI} from '../../auth';
+import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI, AuthAPIProvider} from '../../auth';
 import General, {  Resource } from '../../common';
 import {GetAuthHeaders} from '../services/AuthAPI'
 
@@ -10,51 +10,50 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) =
                 response => { 
                     if(response.IsAuthorizePassword){
                         dispatch({type: authConstants.SET_AUTHORIZE_PASSWORD_SCHEME});
-                        dispatch(Authorize_Password(auth, resource, history));
+                        dispatch(Authorize_Password(history));
                     }
-                        
                 }
             );
-   
 }
-export const Authorize_Password = (auth:AuthAPI, resource:Resource, history:any) => async(dispatch: any)=>
+
+export const Authorize_Password = (history:any, authorizer?) => async(dispatch: any)=>
 {
-    const authorizer = AuthorizerMaker();        
+    let auth = AuthAPIProvider.create();
+
+    if(!authorizer) {
+        const authorizer = AuthorizerMaker();
         if( !authorizer)
         {
           // user does not have any type of access item
           dispatch(SetInValidApiKey());
           history.push('/login'); 
           //APIKEY_NOT_VALID
-        } 
-        else 
-        {
-           auth.authorize(authorizer)
-          .then(
-            response =>{
-                if(response.isvalid) {
-                    dispatch(SetValidApiKey(response.expiresat));
-                    General.RemoveItem("token")
-                    General.SetItem("auth.apikey", response.key);
-                    General.SetItem("auth.expiresat", response.expiresat);
-                    dispatch(RemoveAuthentication());
-                    console.log("Applying Auth Headers for subsequent requests");                       
-                    resource.setGetHeaders(GetAuthHeaders());        
-                    dispatch(SetExpirationTimeout(auth))    
-                }else{
-                    dispatch(SetInValidApiKey());
-                    console.log('Invalid Response');   
-                    General.RemoveItem("token")
-                    General.RemoveItem("auth.apikey");
-                    General.RemoveItem("auth.expiresat");
-                    history.push('/login');
-                }
-                //props.history.push('/login');    
-                //props.resources["aperture"].sendRequest({url: "/test/headers"})
-            }          
-          );
         }
+    }
+    else 
+    {
+        auth.authorize(authorizer)
+        .then(
+        response =>{
+            if(response.isvalid) {
+                dispatch(SetValidApiKey(response.expiresat));
+                dispatch(RemoveAuthentication());
+                dispatch(SetExpirationTimeout(auth));
+                history.push('/'); // This seems pretty wrong! 
+
+            }else{
+                dispatch(SetInValidApiKey());
+                console.log('Invalid Response');
+                General.RemoveItem("token")
+                General.RemoveItem("auth.apikey");
+                General.RemoveItem("auth.expiresat");
+                history.push('/login');
+            }
+        }
+        );
+    }
 }
+
 export const SetValidApiKey = (expireTime) => async(dispatch: any)=>
 {
     dispatch({ type: authConstants.APIKEY_VALID, 

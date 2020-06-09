@@ -43,6 +43,7 @@ export default function (state = initialState, action:any) {
         case authConstants.REMOVE_REQUEST_VALIDATION:
         return {
             ...state,
+            authenticated: true,
             requestAuthentication: false
         };
         case authConstants.VALIDATE_APIKEY_EXP:

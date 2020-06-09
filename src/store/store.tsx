@@ -15,7 +15,7 @@ interface Window {
 const reducer = combineReducers({
  authUser: AuthReducer
 });
-const store = createStore(reducer, initialState, compose(applyMiddleware(...middleware), (window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()) as any));
+const store = {}//createStore(reducer, initialState, compose(applyMiddleware(...middleware), (window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()) as any));
 const StoreMaker = (reducers, initialState, enhancers? ) => {
     let store = createStore(reducers, initialState, enhancers || applyMiddleware(...middleware));
     return store;
