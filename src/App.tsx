@@ -34,17 +34,9 @@ import ProfileActions from './store/actions/profile.actions';
 import { connect } from "react-redux";
 
 const App = (props:any) => {
-  const [langs, setLangs] = useState(props.profile.langs || []);
-  //const [lang, setLang] = useState(props.profile.lang);
-  const [isLoading, setIsLoading] = useState(false);
 
-
-  Resource.interceptors.request = () => {
-    setIsLoading(true);
-  };
-
-  Resource.interceptors.response = () =>{
-    setIsLoading(false);
+  Resource.interceptors.request = ()=> {
+    props.dispatch(ProfileActions.startLoading);
   }
 
   useEffect(() => {
@@ -52,16 +44,14 @@ const App = (props:any) => {
     General.Mediator.subscribe("auth:login:close", () => {
       props.history.push('/');
     });
-
-    Models.GetLanguage({resource: props.resources["aperture"]})
-    .then((response)=> {
-      props.dispatch(ProfileActions.setLang(response.active));
-      I18N.setLang(props.profile.lang);
-      setLangs(response.languages);
-    });
+ 
+    // Get terminology
+    props.dispatch(ProfileActions.getLangs(props.resources["aperture"]));
+    
     _getSchema(props.auth, props.resources["aperture"], props.history);
+    
   }, []);
-
+  
   useEffect(() => {
     I18N.setLang(props.profile.lang);
   },[props.profile.lang]);
@@ -73,14 +63,14 @@ const App = (props:any) => {
 
   return (
     <div className="container">
-        { isLoading? <InlineLoading className="bx--inline-loading--top-fixed" description={props.t('loading...')} /> : ""}
+        { props.profile.isLoading? <InlineLoading className="bx--inline-loading--top-fixed" description={props.t('loading...')} /> : ""}
         <Header aria-label={props.client}>
           <HeaderName href="#" prefix="Kwan">
             [{props.client}]
           </HeaderName>
           <HeaderNavigation aria-label="Kwan [Contoso]">
             <HeaderMenu aria-label={"lang" + props.i18n.language} menuLinkName={"lang(" + props.profile.lang + ")"}>
-              {langs.map((lang, i) => <HeaderMenuItem  key={i} aria-label={lang} onClick={()=>{props.dispatch(ProfileActions.setLang(lang))}}>{lang}</HeaderMenuItem>)}
+              {props.profile.langs.map((lang, i) => <HeaderMenuItem  key={i} aria-label={lang} onClick={()=>{props.dispatch(ProfileActions.setLang(lang))}}>{lang}</HeaderMenuItem>)}
             </HeaderMenu>
           </HeaderNavigation>
           <HeaderGlobalBar aria-label="system actions">
@@ -116,7 +106,8 @@ const AppContainer = (props) => {
 //Connect app to the store(AppProfile)
 const mapStateToProps = state => {
   return {
-    profile: state.AppProfile
+    profile: state.AppProfile,
+    langs: state.AppProfile.langs
   };
 };
 

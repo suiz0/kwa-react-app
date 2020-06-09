@@ -112,7 +112,7 @@ class LoginPage extends React.Component<WithTranslation> {
         iconDescription="describes the close button"
         kind="info"
         subtitle={this.props.t('User') + ": " + Config.credential.user + ' ' + this.props.t('Password') + ": " + Config.credential.password}
-        title="Usage:" />
+        title={this.props.t("Try")} className="bx--inline-notification-full-width" />
         <form ref={this.form}>
                 <TextInput
                     id="user"

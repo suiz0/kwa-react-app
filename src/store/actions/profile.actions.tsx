@@ -1,16 +1,27 @@
-import { resolve } from "url";
+import Models from '../../models';
 
 const setLang = lang => dispatch => {
-        return new Promise((resolve, reject) => {
-            dispatch({type:"SET_LANG", lang: lang});
-            resolve();
-        });
+    dispatch({type:"SET_LANG", lang: lang});
 };
 
-const setLangs = (langs: []) => {
+const getLangs = (resource) => dispatch => {
+    Models.GetLanguage({resource: resource})
+    .then((response) => {
+      dispatch({type: "GET_LANGS", lang: response.active, langs: [...response.languages]});
+    });
+}
 
+const startLoading = dispatch => {
+    dispatch({type: "START_LOADING"});
+};
+
+const stopLoading = dispatch => {
+    dispatch({type: "STOP_LOADING"});
 }
 
 export default {
-    setLang
+    setLang,
+    getLangs,
+    startLoading,
+    stopLoading
 }
