@@ -1,25 +1,29 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import AuthReducer from '../modules/auth/store/reducers/AuthReducer'
+import AppReducer from '../store/reducers/AppReducer';
 
-
-const initialState = {};
 const middleware = [thunk];
 //this is for redux devtool purpose
 declare global {
 interface Window {
- __REDUX_DEVTOOLS_EXTENSION__?: typeof compose;
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
 }
 }
 
-const reducer = combineReducers({
- authUser: AuthReducer
-});
-const store = {}//createStore(reducer, initialState, compose(applyMiddleware(...middleware), (window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()) as any));
-const StoreMaker = (reducers, initialState, enhancers? ) => {
-    let store = createStore(reducers, initialState, enhancers || applyMiddleware(...middleware));
+const localReducers =  combineReducers({AppProfile: AppReducer, AuthUser: AuthReducer});
+const composeEnhacer = typeof window === 'object' &&
+window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
+
+const StoreMaker = (initialState, reducers?, enhancers? ) => {
+    let store = createStore(
+        reducers || localReducers, 
+        initialState, 
+        enhancers || 
+        composeEnhacer(applyMiddleware(...middleware))
+    );
     return store;
 }
 
-export default store;
 export {StoreMaker}
