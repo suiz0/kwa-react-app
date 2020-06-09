@@ -35,8 +35,6 @@ import ProfileActions from './store/actions/profile.actions';
 import { connect } from "react-redux";
 
 const App = (props:any) => {
-  const [langs, setLangs] = useState(props.profile.langs || []);
-  //const [lang, setLang] = useState(props.profile.lang);
   const [isLoading, setIsLoading] = useState(false);
 
   Resource.interceptors.request = () => {
@@ -56,8 +54,7 @@ const App = (props:any) => {
     Models.GetLanguage({resource: props.resources["aperture"]})
     .then((response)=> {
       props.dispatch(ProfileActions.setLang(response.active));
-      I18N.setLang(props.profile.lang);
-      setLangs(response.languages);
+      props.dispatch(ProfileActions.setLangs(response.languages));
     });
 
     props.auth.getScheme()
@@ -82,7 +79,7 @@ const App = (props:any) => {
       }
     });
   }, []);
-
+  
   useEffect(() => {
     I18N.setLang(props.profile.lang);
   },[props.profile.lang]);
@@ -100,7 +97,7 @@ const App = (props:any) => {
           </HeaderName>
           <HeaderNavigation aria-label="Kwan [Contoso]">
             <HeaderMenu aria-label={"lang" + props.i18n.language} menuLinkName={"lang(" + props.profile.lang + ")"}>
-              {langs.map((lang, i) => <HeaderMenuItem  key={i} aria-label={lang} onClick={()=>{props.dispatch(ProfileActions.setLang(lang))}}>{lang}</HeaderMenuItem>)}
+              {props.profile.langs.map((lang, i) => <HeaderMenuItem  key={i} aria-label={lang} onClick={()=>{props.dispatch(ProfileActions.setLang(lang))}}>{lang}</HeaderMenuItem>)}
             </HeaderMenu>
           </HeaderNavigation>
           <HeaderGlobalBar aria-label="system actions">
@@ -136,7 +133,8 @@ const AppContainer = (props) => {
 //Connect app to the store(AppProfile)
 const mapStateToProps = state => {
   return {
-    profile: state.AppProfile
+    profile: state.AppProfile,
+    langs: state.AppProfile.langs
   };
 };
 
