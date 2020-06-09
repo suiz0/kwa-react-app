@@ -6,57 +6,46 @@ import {GetAuthHeaders} from '../../services/AuthAPI'
 export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) => async(dispatch:any)=>
 {
     auth.getScheme()
-            .then(
-                response => { 
-                    if(response.IsAuthorizePassword){
-                        dispatch({type: authConstants.SET_AUTHORIZE_PASSWORD_SCHEME});
-                        let authorizer = AuthorizerMaker();
+    .then(response => { 
+            if(response.IsAuthorizePassword){
+                dispatch({type: authConstants.SET_AUTHORIZE_PASSWORD_SCHEME});
+                let authorizer = AuthorizerMaker();
 
-                        if(!authorizer)
-                        {
-                            dispatch(RequestAuthentication());
-                        }
-                    }
+                if(!authorizer)
+                {
+                    dispatch(RequestAuthentication());
+                } else
+                {
+                   dispatch(Authorize(history, authorizer));
                 }
-            );
+            }
+        }
+    );
 }
 
-export const Authorize_Password = (history:any, authorizer?) => async(dispatch: any)=>
+export const Authorize = (history:any, authorizer?) => async(dispatch: any)=>
 {
     let auth = AuthAPIProvider.create();
 
-   /* if(!authorizer) {
-        const authorizer = AuthorizerMaker();
-        if( !authorizer)
-        {
-          // user does not have any type of access item
-          dispatch(SetInValidApiKey());
-          history.push('/login'); 
-          //APIKEY_NOT_VALID
+    auth.authorize(authorizer)
+    .then(
+    response =>{
+        if(response.isvalid) {
+            dispatch(SetValidApiKey(response.expiresat));
+            dispatch(RemoveAuthentication());
+            dispatch(SetExpirationTimeout(auth));
+            history.push('/'); // This seems pretty wrong! 
+
+        }else{
+            dispatch(SetInValidApiKey());
+            console.log('Invalid Response');
+            General.RemoveItem("token")
+            General.RemoveItem("auth.apikey");
+            General.RemoveItem("auth.expiresat");
+            history.push('/login');
         }
     }
-    else 
-    {*/
-        auth.authorize(authorizer)
-        .then(
-        response =>{
-            if(response.isvalid) {
-                dispatch(SetValidApiKey(response.expiresat));
-                dispatch(RemoveAuthentication());
-                dispatch(SetExpirationTimeout(auth));
-                history.push('/'); // This seems pretty wrong! 
-
-            }else{
-                dispatch(SetInValidApiKey());
-                console.log('Invalid Response');
-                General.RemoveItem("token")
-                General.RemoveItem("auth.apikey");
-                General.RemoveItem("auth.expiresat");
-                history.push('/login');
-            }
-        }
-        );
-    //}
+    );
 }
 
 export const SetValidApiKey = (expireTime) => async(dispatch: any)=>
