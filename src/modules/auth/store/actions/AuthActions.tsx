@@ -1,7 +1,7 @@
-import { authConstants } from '../../../data/constants';
-import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI, AuthAPIProvider} from '../../auth';
-import General, {  Resource } from '../../common';
-import {GetAuthHeaders} from '../services/AuthAPI'
+import { authConstants } from '../../../../data/constants';
+import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI, AuthAPIProvider} from '../..';
+import General, {  Resource } from '../../../common';
+import {GetAuthHeaders} from '../../services/AuthAPI'
 
 export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) => async(dispatch:any)=>
 {

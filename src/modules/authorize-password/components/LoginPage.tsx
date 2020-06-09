@@ -5,7 +5,7 @@ import {withTranslation, WithTranslation} from 'react-i18next';
 import AuthAPI, {AuthAPIProvider} from '../../auth/services/AuthAPI';
 import CredentialsAuthorizer from '../authorizers/CredentialAuthorizer';
 import AuthConfig from '../../auth/services/AuthConfig';
-import {Authorize_Password} from '../../auth/actions/AuthActions';
+import {Authorize_Password} from '../../auth/store/actions/AuthActions';
 
 class LoginPage extends React.Component<WithTranslation & any> {
 

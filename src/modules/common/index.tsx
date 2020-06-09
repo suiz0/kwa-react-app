@@ -4,9 +4,10 @@ import withResources from './components/WithResources';
 import Bootstrap from './components/Bootstrap';
 import AppProfile from './services/AppProfile';
 import Config, {load} from './services/Config';
-import AppProfileReducer from './reducers/AppProfileReducer';
+import AppProfileReducer from './store/reducers/AppProfileReducer';
+import ProfileActions from './store/actions/AppProfileActions';
 
-export { Mediator, Resource , withResources, AppProfile, Config, load, Bootstrap, AppProfileReducer};
+export { Mediator, Resource , withResources, AppProfile, Config, load, Bootstrap, AppProfileReducer, ProfileActions};
 export default {
     Resource: Resource,
     Mediator: Mediator,

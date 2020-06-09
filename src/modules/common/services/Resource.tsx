@@ -1,7 +1,7 @@
 import General from '..';
 import store from '../../../store/store';
 import { rejects } from 'assert';
-import {IncreaseExpirationTimeout, RequestAuthentication, SetInValidApiKey} from '../../auth/actions/AuthActions'
+import {IncreaseExpirationTimeout, RequestAuthentication, SetInValidApiKey} from '../../auth/store/actions/AuthActions'
 
 class Resource
 {

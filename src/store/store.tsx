@@ -1,6 +1,6 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import AuthReducer from '../modules/auth/reducers/AuthReducer'
+import AuthReducer from '../modules/auth/store/reducers/AuthReducer'
 
 
 const initialState = {};

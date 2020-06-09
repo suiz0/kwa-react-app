@@ -1,0 +1,5 @@
+export default {
+    SET_LANG: "SET_LANG",
+    START_LOADING: "START_LOADING",
+    STOP_LOADING: "STOP_LOADING"
+}

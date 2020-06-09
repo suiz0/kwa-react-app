@@ -1,4 +1,4 @@
-import { authConstants } from '../../../data/constants'
+import { authConstants } from '../../../../data/constants'
 
 const initialState = {
  isAuthorizePassword: false,
