@@ -51,11 +51,8 @@ const App = (props:any) => {
       props.history.push('/');
     });
 
-    Models.GetLanguage({resource: props.resources["aperture"]})
-    .then((response)=> {
-      props.dispatch(ProfileActions.setLang(response.active));
-      props.dispatch(ProfileActions.setLangs(response.languages));
-    });
+    // Get terminology
+    props.dispatch(ProfileActions.getLangs(props.resources["aperture"]));
 
     props.auth.getScheme()
     .then((response: AuthScheme) => {

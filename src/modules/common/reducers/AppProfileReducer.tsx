@@ -13,10 +13,11 @@ export default (state, action) => {
             };
             break;
         
-        case "SET_LANGS":
+        case "GET_LANGS":
             newState = {
                 ...state,
-                langs: action.langs
+                langs: action.langs,
+                lang: action.lang
             };
             break;
         default:
