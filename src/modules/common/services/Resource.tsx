@@ -12,7 +12,8 @@ class Resource
     static mockData:any;
     static interceptors = {
         request: ()=>{},
-        response: ()=>{}
+        response: ()=>{},
+        validateExpiration:()=>{}
     };
 
     constructor(options)
@@ -26,24 +27,7 @@ class Resource
     }
 
     sendRequest(options): Promise<any>
-    {
-        const {isValidKey, authenticated, expireTimeout} = store.getState().authUser;
-        if(isValidKey && authenticated){
-            if(Date.now() > expireTimeout){
-                store.dispatch(RequestAuthentication);
-                store.dispatch(SetInValidApiKey);
-                const promise = new Promise((resolve, reject) => {
-                    console.log('Session Expired, Call Aborted')
-                    setTimeout(() => {
-                        reject('Session Expired, Call Aborted');
-                    }, Resource.timeout);
-                });
-                return promise;
-            }else{
-                store.dispatch(IncreaseExpirationTimeout);
-            }
-              
-        }
+    {       
         let customHeaders = this.GetHeadersHandler;
 
         if(!options.type) options.type = "GET";
@@ -61,6 +45,12 @@ class Resource
             this.logRequest(options);
             setTimeout(() => {
                 Resource.interceptors.response();
+                try{
+                    Resource.interceptors.validateExpiration();
+                }
+                catch(e){
+                    console.log(e);
+                }
                 resolve(mockData);
             }, Resource.timeout);
         });

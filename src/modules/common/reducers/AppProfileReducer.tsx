@@ -33,6 +33,13 @@ export default (state, action) => {
                 isLoading: false
             }
             break;
+        case "GET_PLUGINS":
+                newState = {
+                    ...state,
+                    Resources: {plugins: 'plugins'}
+                }
+                break;
+            
         default:
             newState= !state ? initialState: state;
     }

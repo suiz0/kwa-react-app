@@ -17,6 +17,22 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) =
             );
    
 }
+
+export const getCurrentSchemaTest = (auth:AuthAPI) => async(dispatch:any)=>
+{
+    console.log('Test');
+    auth.getScheme()
+            .then(
+                response => { 
+                    if(response.IsAuthorizePassword){
+                        console.log('Un Si de Prueba');
+                    }
+                        
+                }
+            );
+   
+}
+
 export const Authorize_Password = (auth:AuthAPI, resource:Resource, history:any) => async(dispatch: any)=>
 {
     const authorizer = AuthorizerMaker();        
@@ -40,7 +56,12 @@ export const Authorize_Password = (auth:AuthAPI, resource:Resource, history:any)
                     dispatch(RemoveAuthentication());
                     console.log("Applying Auth Headers for subsequent requests");                       
                     resource.setGetHeaders(GetAuthHeaders());        
-                    dispatch(SetExpirationTimeout(auth))    
+                    dispatch(SetExpirationTimeout(auth))   
+                    Resource.interceptors.validateExpiration= ()=> {
+                        console.log('Setting interceptor for validation')
+                        dispatch(ValidateExpirationTimeout());
+                      }
+
                 }else{
                     dispatch(SetInValidApiKey());
                     console.log('Invalid Response');   
@@ -76,7 +97,7 @@ export const RequestAuthentication = () => async(dispatch: any)=>
     dispatch({ type: authConstants.ADD_REQUEST_VALIDATION });
 }
 
-export const SetExpirationTimeout = (auth:AuthAPI) => (dispatch: any)=>
+export const SetExpirationTimeout = (auth:AuthAPI) => async(dispatch: any)=>
 {
     auth.getPlatformSettings()
             .then(
@@ -84,17 +105,51 @@ export const SetExpirationTimeout = (auth:AuthAPI) => (dispatch: any)=>
                     dispatch({ 
                         type: authConstants.SET_EXPIRATION_TIMEOUT, 
                         timeout: response.timeout
-                    });
+                    })
                     dispatch({ 
                         type: authConstants.SET_AUTHENTICATED
-                    });
+                    })
+                    dispatch({ 
+                        type: authConstants.VALIDATE_APIKEY_EXP
+                    })
                 }
             );
    
 }
 
-export const IncreaseExpirationTimeout = (auth:AuthAPI) => (dispatch: any, getState)=>
+export const IncreaseExpirationTimeout = () => async(dispatch: any, getState)=>
 {
     dispatch({ type: authConstants.INCREASE_TIMEOUT, 
-        sessionExpire: Date.now() + getState().auth.increaseTimeout });
+        sessionExpire: Date.now() + getState().AuthUser.increaseTimeout });
+}
+
+export const ValidateExpirationTimeout = () => async(dispatch: any, getState)=>
+{
+    console.log('Last State' ,getState());
+    console.log('Interceptor ValidateExpirationTimeout called');
+    const {validetaApiExp, expireTimeout} = getState().AuthUser;
+        if(validetaApiExp){
+            console.log('Validating api key exp');
+            if(Date.now() > expireTimeout){
+                console.log('Expired Key. Start Abortion');
+                General.RemoveItem("token")
+                General.RemoveItem("auth.apikey");
+                General.RemoveItem("auth.expiresat");
+                dispatch({ 
+                    type: authConstants.SET_UNAUTHENTICATED
+                })
+                const promise = new Promise((resolve, reject) => {
+                    console.log('Session Expired, Call Aborted')
+                    setTimeout(() => {
+                        reject('Session Expired, Call Aborted');
+                    }, Resource.timeout);
+                });
+               // dispatch(Authorize_Password();
+                return promise;
+            }else{
+                dispatch(IncreaseExpirationTimeout());
+            }
+              
+        }
+   
 }
