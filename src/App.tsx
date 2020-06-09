@@ -29,7 +29,7 @@ import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import AuthorizePassword from './modules/authorize-password/';
 //REDUX 
-import {getCurrentSchema} from './modules/auth/actions/AuthActions';
+import {getCurrentSchema, ValidateExpirationTimeout} from './modules/auth/actions/AuthActions';
 import ProfileActions from './store/actions/profile.actions';
 import { connect } from "react-redux";
 
@@ -42,6 +42,11 @@ const App = (props:any) => {
   Resource.interceptors.response = ()=> {
     props.dispatch(ProfileActions.stopLoading);
   }
+
+  Resource.interceptors.response = ()=> {
+    props.dispatch(ValidateExpirationTimeout());
+  }
+  
 
   useEffect(() => {
     // componentDidMount

@@ -1,7 +1,6 @@
 import General from '..';
 import store from '../../../store/store';
 import { rejects } from 'assert';
-import {IncreaseExpirationTimeout, RequestAuthentication, SetInValidApiKey} from '../../auth/actions/AuthActions'
 
 class Resource
 {
@@ -45,7 +44,6 @@ class Resource
             this.logRequest(options);
             setTimeout(() => {
                 Resource.interceptors.response();
-                
                 Resource.interceptors.validateExpiration()
                
                 resolve(mockData);

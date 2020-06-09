@@ -24,7 +24,6 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) =
 
 export const getCurrentSchemaTest = (auth:AuthAPI) => async(dispatch:any)=>
 {
-    console.log('Test');
     auth.getScheme()
             .then(
                 response => { 
@@ -44,9 +43,8 @@ export const Authorize_Password = (history:any, authorizer?) => async(dispatch: 
         response =>{
             if(response.isvalid) {
                 dispatch(SetValidApiKey(response.expiresat));
-                dispatch(RemoveAuthentication());
+                dispatch(RemoveAuthentication());                   
                 dispatch(SetExpirationTimeout(auth));
-                dispatch(IncreaseExpirationTimeout());
                 history.push('/'); // This seems pretty wrong! 
 
             }else{
@@ -88,6 +86,7 @@ export const SetExpirationTimeout = (auth:AuthAPI) => async(dispatch: any)=>
     auth.getPlatformSettings()
             .then(
                 response => { 
+                    console.log('getPlatformSettings',response);
                     dispatch({ 
                         type: authConstants.SET_EXPIRATION_TIMEOUT, 
                         timeout: response.timeout
@@ -105,6 +104,7 @@ export const SetExpirationTimeout = (auth:AuthAPI) => async(dispatch: any)=>
 
 export const IncreaseExpirationTimeout = () => async(dispatch: any, getState)=>
 {
+    console.log()
     dispatch({ type: authConstants.INCREASE_TIMEOUT, 
         sessionExpire: Date.now() + getState().AuthUser.increaseTimeout });
 }
@@ -124,8 +124,8 @@ export const ValidateExpirationTimeout = () => async(dispatch: any, getState)=>
                 })
                 const promise = new Promise((resolve, reject) => {
                     console.log('Session Expired, Call Aborted')
-                    return reject('Session Expired, Call Aborted')
-                });
+                     reject(new Error('Session Expired, Please Sign In again to restore your session'))
+                }).catch(alert);
                 dispatch(RequestAuthentication());
                 return promise;
             }else{

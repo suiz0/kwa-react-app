@@ -4,13 +4,7 @@ import {getCurrentSchemaTest} from '../modules/auth/actions/AuthActions'
 
 const HomePage = (props) => {
   console.log('Home',props);
-  const isAuth = props.userAuth.authenticated;
-
-  useEffect(() => {
-
-    props.dispatch(getCurrentSchemaTest(props.auth));
-    
-  }, [props.userAuth.authenticated]);
+  const isAuth = props.authUser.authenticated;
 
     const content = (
       <div className="bx--grid">
