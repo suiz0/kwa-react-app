@@ -3,11 +3,11 @@ import { authConstants } from '../../../data/constants'
 const initialState = {
  isAuthorizePassword: false,
  authenticated: false,
- credentials: {},
  isValidKey: false,
  requestAuthentication: true,
  validetaApiExp: false,
- expireTimeout: 0
+ expireTimeout: 0,
+ increaseTimeout: 0
 }
 
 export default function (state = initialState, action:any) {
@@ -27,7 +27,8 @@ export default function (state = initialState, action:any) {
         case authConstants.APIKEY_VALID:
         return {
             ...state,
-            isValidKey:true
+            isValidKey:true,
+            expireTimeout: action.sessionExpire
         };
         case authConstants.APIKEY_NOT_VALID:
         return {
@@ -52,7 +53,12 @@ export default function (state = initialState, action:any) {
         case authConstants.SET_EXPIRATION_TIMEOUT:
             return {
             ...state,
-            expireTimeout: action.timeout
+            increaseTimeout: action.timeout
+            };   
+        case authConstants.INCREASE_TIMEOUT:
+            return {
+            ...state,
+            expireTimeout: action.sessionExpire
             };           
         default:
             return state;

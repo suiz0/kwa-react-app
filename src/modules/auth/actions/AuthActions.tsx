@@ -1,15 +1,14 @@
 import { authConstants } from '../../../data/constants';
 import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI} from '../../auth';
 import General, {  Resource } from '../../common';
-import GetAuthHeaders from '../services/AuthAPI'
-//=>async(dispatch, getState)
-export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) => async(dispatch:any, getState)=>
+import {GetAuthHeaders} from '../services/AuthAPI'
+
+export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) => async(dispatch:any)=>
 {
     auth.getScheme()
             .then(
                 response => { 
                     if(response.IsAuthorizePassword){
-                        console.log(getState());
                         dispatch({type: authConstants.SET_AUTHORIZE_PASSWORD_SCHEME});
                         dispatch(Authorize_Password(auth, resource, history));
                     }
@@ -34,13 +33,13 @@ export const Authorize_Password = (auth:AuthAPI, resource:Resource, history:any)
           .then(
             response =>{
                 if(response.isvalid) {
-                    dispatch(SetValidApiKey());
+                    dispatch(SetValidApiKey(response.expiresat));
                     General.RemoveItem("token")
                     General.SetItem("auth.apikey", response.key);
                     General.SetItem("auth.expiresat", response.expiresat);
                     dispatch(RemoveAuthentication());
-                    console.log("Applying Auth Headers for subsequent requests");
-                    //resource.setGetHeaders(GetAuthHeaders);        
+                    console.log("Applying Auth Headers for subsequent requests");                       
+                    resource.setGetHeaders(GetAuthHeaders());        
                     dispatch(SetExpirationTimeout(auth))    
                 }else{
                     dispatch(SetInValidApiKey());
@@ -56,9 +55,10 @@ export const Authorize_Password = (auth:AuthAPI, resource:Resource, history:any)
           );
         }
 }
-export const SetValidApiKey = () => async(dispatch: any)=>
+export const SetValidApiKey = (expireTime) => async(dispatch: any)=>
 {
-    dispatch({ type: authConstants.APIKEY_VALID });
+    dispatch({ type: authConstants.APIKEY_VALID, 
+        sessionExpire: Date.now() + expireTime });
 }
 
 export const SetInValidApiKey = () => async(dispatch: any)=>
@@ -71,6 +71,11 @@ export const RemoveAuthentication = () => async(dispatch: any)=>
     dispatch({ type: authConstants.REMOVE_REQUEST_VALIDATION });
 }
 
+export const RequestAuthentication = () => async(dispatch: any)=>
+{
+    dispatch({ type: authConstants.ADD_REQUEST_VALIDATION });
+}
+
 export const SetExpirationTimeout = (auth:AuthAPI) => (dispatch: any)=>
 {
     auth.getPlatformSettings()
@@ -80,7 +85,16 @@ export const SetExpirationTimeout = (auth:AuthAPI) => (dispatch: any)=>
                         type: authConstants.SET_EXPIRATION_TIMEOUT, 
                         timeout: response.timeout
                     });
+                    dispatch({ 
+                        type: authConstants.SET_AUTHENTICATED
+                    });
                 }
             );
    
+}
+
+export const IncreaseExpirationTimeout = (auth:AuthAPI) => (dispatch: any, getState)=>
+{
+    dispatch({ type: authConstants.INCREASE_TIMEOUT, 
+        sessionExpire: Date.now() + getState().auth.increaseTimeout });
 }

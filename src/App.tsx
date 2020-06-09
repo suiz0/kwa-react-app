@@ -29,7 +29,6 @@ import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import AuthorizePassword from './modules/authorize-password/';
 //REDUX 
-import {useDispatch} from 'react-redux';
 import {getCurrentSchema} from './modules/auth/actions/AuthActions';
 import ProfileActions from './store/actions/profile.actions';
 import { connect } from "react-redux";
@@ -60,7 +59,7 @@ const App = (props:any) => {
       I18N.setLang(props.profile.lang);
       setLangs(response.languages);
     });
-    _getSchema(props.auth, props.resource, props.history);
+    _getSchema(props.auth, props.resources["aperture"], props.history);
   }, []);
 
   useEffect(() => {
@@ -69,7 +68,7 @@ const App = (props:any) => {
 
 
   const _getSchema =(auth:AuthAPI, resource:Resource, history:any) =>{
-   props.dispatch(getCurrentSchema(auth, resource, history))
+   props.dispatch(getCurrentSchema(auth, resource, history));
   }
 
   return (

@@ -53,6 +53,7 @@ class AuthAPI
     {
         this.resource = props? props.resource:null;
     }
+    
 
     // Get Auth Scheme
     getScheme(options?): Promise<AuthScheme> {
@@ -70,7 +71,6 @@ class AuthAPI
         let opts = Object.assign({}, options||{});
 
         if(this.resource===null) this.resource = AppProfile.Resources[AuthConfig.servicekey];
-
         opts.type="get";
         opts.url = "/platformsettings/";
         General.Resource.mockData = platformSettings;
@@ -83,21 +83,6 @@ class AuthAPI
     public authorize(authorizer: IAuthorizer) 
     {
         return authorizer.authorize()
-        .then((response)=> {
-            if(response.isvalid) {
-                General.RemoveItem("token")
-                General.SetItem("auth.apikey", response.key);
-                General.SetItem("auth.expiresat", response.expiresat);
-                console.log("Applying Auth Headers for subsequent requests");
-                this.resource.setGetHeaders(GetAuthHeaders);            
-            }else{
-                console.log('Invalid Response');   
-                General.RemoveItem("token")
-                General.RemoveItem("auth.apikey");
-                General.RemoveItem("auth.expiresat");
-            }
-            return response;
-        })
         .catch((response) => {
             return {isValid: false, message: response.message};
         });
