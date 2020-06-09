@@ -10,9 +10,6 @@ import {AppProfile} from '../../common';
 
 // Factory Method
 const AuthorizerMaker = (): IAuthorizer | null => {
-    General.SetItem('token', 'hardtoken'); //REMOVE THIS LATER
-    General.RemoveItem('auth.apikey'); //REMOVE THIS LATER
-    //General.RemoveItem('token'); //REMOVE THIS LATER
     switch(true) {
         case General.GetItem('auth.apikey') != null:
             return new KeyAuthorizer({key: General.GetItem('auth.apikey'), resource: AppProfile.Resources[AuthConfig.servicekey]});
