@@ -5,14 +5,23 @@ const setLang = lang => dispatch => {
 };
 
 const getLangs = (resource) => dispatch => {
-
     Models.GetLanguage({resource: resource})
     .then((response) => {
       dispatch({type: "GET_LANGS", lang: response.active, langs: [...response.languages]});
     });
 }
 
+const startLoading = dispatch => {
+    dispatch({type: "START_LOADING"});
+};
+
+const stopLoading = dispatch => {
+    dispatch({type: "STOP_LOADING"});
+}
+
 export default {
     setLang,
-    getLangs
+    getLangs,
+    startLoading,
+    stopLoading
 }

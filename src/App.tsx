@@ -35,14 +35,12 @@ import ProfileActions from './store/actions/profile.actions';
 import { connect } from "react-redux";
 
 const App = (props:any) => {
-  const [isLoading, setIsLoading] = useState(false);
+  Resource.interceptors.request = ()=> {
+    props.dispatch(ProfileActions.startLoading);
+  }
 
-  Resource.interceptors.request = () => {
-    setIsLoading(true);
-  };
-
-  Resource.interceptors.response = () =>{
-    setIsLoading(false);
+  Resource.interceptors.response = () => {
+    props.dispatch(ProfileActions.stopLoading);
   }
 
   useEffect(() => {
@@ -53,7 +51,6 @@ const App = (props:any) => {
 
     // Get terminology
     props.dispatch(ProfileActions.getLangs(props.resources["aperture"]));
-
     props.auth.getScheme()
     .then((response: AuthScheme) => {
       if(response.IsAuthorizePassword)
@@ -87,7 +84,7 @@ const App = (props:any) => {
 
   return (
     <div className="container">
-        { isLoading? <InlineLoading className="bx--inline-loading--top-fixed" description={props.t('loading...')} /> : ""}
+        { props.profile.isLoading? <InlineLoading className="bx--inline-loading--top-fixed" description={props.t('loading...')} /> : ""}
         <Header aria-label={props.client}>
           <HeaderName href="#" prefix="Kwan">
             [{props.client}]

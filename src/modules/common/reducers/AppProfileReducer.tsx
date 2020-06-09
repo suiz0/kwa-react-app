@@ -20,9 +20,21 @@ export default (state, action) => {
                 lang: action.lang
             };
             break;
+        case "START_LOADING":
+            newState = {
+                ...state,
+                isLoading: true
+            };
+            break;
+
+        case "STOP_LOADING":
+            newState = {
+                ...state,
+                isLoading: false
+            }
+            break;
         default:
             newState= !state ? initialState: state;
-            
     }
 
     return newState;
