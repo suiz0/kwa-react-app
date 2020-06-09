@@ -5,7 +5,6 @@ import AuthScheme from '../models/IAuthScheme';
 import IAuthorizer from '../authorizers/IAuthorizer';
 import TokenAuthorizer from '../authorizers/TokenAuthorizer';
 import KeyAuthorizer from '../authorizers/KeyAuthorizer';
-import CredentialsAuthorizer from '../authorizers/CredentialAuthorizer';
 import AuthConfig from '../services/AuthConfig';
 import {AppProfile} from '../../common';
 
