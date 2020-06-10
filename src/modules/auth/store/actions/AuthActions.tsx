@@ -38,17 +38,20 @@ export const getCurrentSchemaTest = (auth:AuthAPI) => async(dispatch:any)=>
 }
 
 // Makes request with authorization headers
-export const MakeRequest = (options, metadata) => (dispatch, getState)=> {
-
-    const {isValidKey, authenticated, expireTimeout} = getState().authUser;
+export const MakeRequest = (options, metadata) => async(dispatch, getState)=> {
+    const {validetaApiExp, expireTimeout} = getState().AuthUser;
     const auth = AuthAPIProvider.create();
-
-    if(isValidKey && authenticated) {
+    if(validetaApiExp) {
         if(Date.now() > expireTimeout){
-            dispatch(RequestAuthentication);
-            dispatch(SetInValidApiKey);
+            General.RemoveItem("token")
+            General.RemoveItem("auth.apikey");
+            General.RemoveItem("auth.expiresat");
+            dispatch({ 
+                type: authConstants.SET_UNAUTHENTICATED
+            })
+            dispatch({type: "AUTH_LOGIN_LOAD"});
         }else{
-            dispatch(IncreaseExpirationTimeout);
+            dispatch(IncreaseExpirationTimeout());
             auth.fetch(options)
             .then((response)=> {
                 dispatch(success(response, metadata));
@@ -57,9 +60,10 @@ export const MakeRequest = (options, metadata) => (dispatch, getState)=> {
         }
     }
 
-    function success(response, metadata) {return {type: "REQUEST_SUCCESS", data: response, ...metadata}}
+    function success(response, metadata) {return{type: "REQUEST_SUCCESS", data: response, ...metadata}}
     function error(error, metadata) {return {type: "REQUEST_ERROR", message: error, ...metadata}}
 }
+                
 
 export const Authorize = (authorizer) => async(dispatch: any)=>
 {
@@ -126,12 +130,11 @@ export const SetExpirationTimeout = (auth:AuthAPI) => async(dispatch: any)=>
    
 }
 
-export const IncreaseExpirationTimeout = () => async(dispatch: any, getState)=>
+export const IncreaseExpirationTimeout = () => (dispatch: any, getState)=>
 {
     dispatch({ type: authConstants.INCREASE_TIMEOUT, 
         sessionExpire: Date.now() + getState().AuthUser.increaseTimeout });
 }
-
 
 export const ValidateExpirationTimeout = () => async(dispatch: any, getState)=>
 {

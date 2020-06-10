@@ -24,6 +24,13 @@ export default (state, action) => {
                 path:'/'
             }
             break;
+        case "REQUEST_SUCCESS":
+            return {
+                ...state,
+                rows: action.data.rows,
+                headers: action.data.headers
+                };
+                break;
         default:
             return AppProfileReducer(state, action);
             break;

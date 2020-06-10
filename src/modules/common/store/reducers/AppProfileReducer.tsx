@@ -40,14 +40,8 @@ export default (state, action) => {
                 ...state,
                 isLoading: false
             }
-            break;
-        case "GET_PLUGINS":
-                newState = {
-                    ...state,
-                    Resources: {plugins: 'plugins'}
-                }
-                break;
-            
+            break;      
+
         default:
             newState= !state ? initialState: state;
 

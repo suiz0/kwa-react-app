@@ -3,8 +3,10 @@ class AppProfile {
     lang = 'en';
     langs: any[] = [];
     static Resources = {};
-    client = "";
-    isLoading = false;
+    client: string = "";
+    isLoading: boolean = false;
+    rows: any[] = [];
+    headers: any[] = [];
   }
 
 export default AppProfile;
