@@ -1,25 +1,26 @@
-import { authConstants } from '../../../data/constants';
-import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI, AuthAPIProvider} from '../../auth';
-import General, {  Resource } from '../../common';
-import {GetAuthHeaders} from '../services/AuthAPI'
+import { authConstants } from '../../../../data/constants';
+import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI, AuthAPIProvider} from '../..';
+import General, {  Resource } from '../../../common';
+import {GetAuthHeaders} from '../../services/AuthAPI'
 
-export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) => async(dispatch:any)=>
+export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispatch:any)=>
 {
     auth.getScheme()
-            .then(
-                response => { 
-                    if(response.IsAuthorizePassword){
-                        dispatch({type: authConstants.SET_AUTHORIZE_PASSWORD_SCHEME});
-                        let authorizer = AuthorizerMaker();
-                        if(!authorizer)
-                        {
-                            dispatch(RequestAuthentication());
-                        }else{
-                            dispatch(Authorize_Password(history, authorizer));
-                        }
-                    }
+    .then(response => { 
+            if(response.IsAuthorizePassword){
+                dispatch({type: authConstants.SET_AUTHORIZE_PASSWORD_SCHEME});
+                const authorizer = AuthorizerMaker();
+
+                if(!authorizer)
+                {
+                    dispatch(RequestAuthentication());
+                } else
+                {
+                   dispatch(Authorize(authorizer));
                 }
-            );
+            }
+        }
+    );
 }
 
 export const getCurrentSchemaTest = (auth:AuthAPI) => async(dispatch:any)=>
@@ -35,29 +36,52 @@ export const getCurrentSchemaTest = (auth:AuthAPI) => async(dispatch:any)=>
             );
    
 }
-export const Authorize_Password = (history:any, authorizer?) => async(dispatch: any)=>
-{
-    let auth = AuthAPIProvider.create();
-        auth.authorize(authorizer)
-        .then(
-        response =>{
-            if(response.isvalid) {
-                dispatch(SetValidApiKey(response.expiresat));
-                dispatch(RemoveAuthentication());                   
-                dispatch(SetExpirationTimeout(auth));
-                history.push('/'); // This seems pretty wrong! 
 
-            }else{
-                dispatch(SetInValidApiKey());
-                console.log('Invalid Response');
-                General.RemoveItem("token")
-                General.RemoveItem("auth.apikey");
-                General.RemoveItem("auth.expiresat");
-                history.push('/login');
-            }
+// Makes request with authorization headers
+export const MakeRequest = (options, metadata) => (dispatch, getState)=> {
+
+    const {isValidKey, authenticated, expireTimeout} = getState().authUser;
+    const auth = AuthAPIProvider.create();
+
+    if(isValidKey && authenticated) {
+        if(Date.now() > expireTimeout){
+            dispatch(RequestAuthentication);
+            dispatch(SetInValidApiKey);
+        }else{
+            dispatch(IncreaseExpirationTimeout);
+            auth.fetch(options)
+            .then((response)=> {
+                dispatch(success(response, metadata));
+            })
+            .catch(errorMsg=>error(errorMsg, metadata))
         }
-        );
-    //}
+    }
+
+    function success(response, metadata) {return {type: "REQUEST_SUCCESS", data: response, ...metadata}}
+    function error(error, metadata) {return {type: "REQUEST_ERROR", message: error, ...metadata}}
+}
+
+export const Authorize = (authorizer) => async(dispatch: any)=>
+{
+    const auth = AuthAPIProvider.create();
+
+    auth.authorize(authorizer)
+    .then(
+    response =>{
+        if(response.isvalid) {
+            dispatch(SetValidApiKey(response.expiresat));
+            dispatch(RemoveAuthentication());
+            dispatch(SetExpirationTimeout(auth));
+
+        }else{
+            dispatch(SetInValidApiKey());
+            console.log('Invalid Response');
+            General.RemoveItem("token")
+            General.RemoveItem("auth.apikey");
+            General.RemoveItem("auth.expiresat");
+        }
+    }
+    );
 }
 
 export const SetValidApiKey = (expireTime) => async(dispatch: any)=>
@@ -104,10 +128,10 @@ export const SetExpirationTimeout = (auth:AuthAPI) => async(dispatch: any)=>
 
 export const IncreaseExpirationTimeout = () => async(dispatch: any, getState)=>
 {
-    console.log()
     dispatch({ type: authConstants.INCREASE_TIMEOUT, 
         sessionExpire: Date.now() + getState().AuthUser.increaseTimeout });
 }
+
 
 export const ValidateExpirationTimeout = () => async(dispatch: any, getState)=>
 {

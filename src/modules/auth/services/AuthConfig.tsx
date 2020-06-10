@@ -1,4 +1,4 @@
-let Config={
+const Config={
     servicekey: "aperture"
 }
 

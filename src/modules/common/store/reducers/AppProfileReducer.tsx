@@ -1,39 +1,40 @@
-import profile from '../services/AppProfile';
-import {authConstants} from '../../../data/constants';
+import profile from '../../services/AppProfile';
+import actions from '../ProfileConstants';
+//import {authConstants} from '../../../../data/constants';
 
-let initialState = new profile();
+const initialState = new profile();
 
 export default (state, action) => {
     let newState;
     switch(action.type)
     {
-        case "SET_LANG":
+        case actions.SET_LANG:
             newState = {
                 ...state,
                 lang: action.lang
             };
             break;
         
-        case "GET_LANGS":
+        /*case "GET_LANGS":
             newState = {
                 ...state,
                 langs: action.langs,
                 lang: action.lang
             };
-            break;
-        case "START_LOADING":
+            break;*/
+        case actions.START_LOADING:
             newState = {
                 ...state,
                 isLoading: true
             };
             break;
 
-        case authConstants.ADD_REQUEST_VALIDATION:
+        /*case authConstants.ADD_REQUEST_VALIDATION: // This needs to be moved to the app folder
             newState = {
                 ...state,
                 goto: '/login'
             }
-            break;
+            break;*/
         case "STOP_LOADING":
             newState = {
                 ...state,

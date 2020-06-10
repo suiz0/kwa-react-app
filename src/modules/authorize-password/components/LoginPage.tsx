@@ -5,7 +5,7 @@ import {withTranslation, WithTranslation} from 'react-i18next';
 import AuthAPI, {AuthAPIProvider} from '../../auth/services/AuthAPI';
 import CredentialsAuthorizer from '../authorizers/CredentialAuthorizer';
 import AuthConfig from '../../auth/services/AuthConfig';
-import {Authorize_Password} from '../../auth/actions/AuthActions';
+import {Authorize } from '../../auth/store/actions/AuthActions';
 
 class LoginPage extends React.Component<WithTranslation & any> {
 
@@ -27,16 +27,11 @@ class LoginPage extends React.Component<WithTranslation & any> {
         this.resetValidationError = this.resetValidationError.bind(this);
     }
 
-    componentDidUpdate(prevProps)
-    {
-        if(this.props.authUser.authenticated) // this might change but for now is ok
-            this.props.history.push('/');
-    }
-
     onClose = () => {
-        General.Mediator.publish("auth:login:close");
+        this.props.dispatch({type:"AUTH_LOGIN_CANCEL"});
     }
 
+    // Validate form inputs
     validate()
     {
         let ctrl: any;
@@ -59,7 +54,7 @@ class LoginPage extends React.Component<WithTranslation & any> {
         this.setState({isLoading: true});
         if(this.validate()) 
         {
-            this.props.dispatch(Authorize_Password(this.props.history, new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]})));
+            this.props.dispatch(Authorize(new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]})));
             setTimeout(()=>{
                 this.setState({isLoading: false});
             }, 1000);
@@ -71,7 +66,7 @@ class LoginPage extends React.Component<WithTranslation & any> {
 
     resetValidationError(ev)
     {
-        let errors = 
+        const errors = 
         {
             ...this.state.validationErrors,
             [ev.target.id]:null

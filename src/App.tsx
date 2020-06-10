@@ -29,8 +29,8 @@ import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import AuthorizePassword from './modules/authorize-password/';
 //REDUX 
-import {getCurrentSchema, ValidateExpirationTimeout} from './modules/auth/actions/AuthActions';
-import ProfileActions from './store/actions/profile.actions';
+import {getCurrentSchema, ValidateExpirationTimeout} from './modules/auth/store/actions/AuthActions';
+import ProfileActions from './store/actions/AppActions';
 import { connect } from "react-redux";
 
 const App = (props:any) => {
@@ -43,21 +43,17 @@ const App = (props:any) => {
     props.dispatch(ProfileActions.stopLoading);
   }
 
-  Resource.interceptors.response = ()=> {
+  Resource.interceptors.validateExpiration = ()=> {
     props.dispatch(ValidateExpirationTimeout());
   }
   
 
   useEffect(() => {
     // componentDidMount
-    General.Mediator.subscribe("auth:login:close", () => {
-      props.history.push('/');
-    });
- 
     // Get terminology
     props.dispatch(ProfileActions.getLangs(props.resources["aperture"]));
     
-    _getSchema(props.auth, props.resources["aperture"], props.history);
+    _getSchema(props.auth, props.resources["aperture"]);
     
   }, []);
   
@@ -66,11 +62,11 @@ const App = (props:any) => {
   },[props.profile.lang]);
 
   useEffect(() => {
-    props.history.push(props.profile.goto);
-  },[props.profile.goto]);
+    props.history.push(props.profile.path);
+  },[props.profile.path]);
 
-  const _getSchema =(auth:AuthAPI, resource:Resource, history:any) =>{
-   props.dispatch(getCurrentSchema(auth, resource, history));
+  const _getSchema =(auth:AuthAPI, resource:Resource) =>{
+   props.dispatch(getCurrentSchema(auth, resource));
   }
 
   return (
@@ -86,7 +82,7 @@ const App = (props:any) => {
             </HeaderMenu>
           </HeaderNavigation>
           <HeaderGlobalBar aria-label="system actions">
-            <HeaderGlobalAction aria-label="admin option" isActive onClick={()=>{ props.history.push('/login')}}> 
+            <HeaderGlobalAction aria-label="admin option" isActive onClick={()=>{ props.dispatch(ProfileActions.loadLogin) }}> 
               <Components.AdminOption {...props} />
             </HeaderGlobalAction>
           </HeaderGlobalBar>

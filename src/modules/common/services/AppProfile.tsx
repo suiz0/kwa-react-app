@@ -1,10 +1,10 @@
 class AppProfile {
-    isAuthenticated: boolean =  false;
-    lang: string = 'en';
+    isAuthenticated =  false;
+    lang = 'en';
     langs: any[] = [];
     static Resources = {};
-    client: string = "";
-    isLoading: boolean = false;
+    client = "";
+    isLoading = false;
   }
 
 export default AppProfile;

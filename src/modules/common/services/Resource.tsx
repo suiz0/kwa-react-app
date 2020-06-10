@@ -1,18 +1,14 @@
-import General from '..';
-import store from '../../../store/store';
-import { rejects } from 'assert';
-
 class Resource
 {
     baseURL: string;
     GetHeadersHandler: any;
 
-    static timeout: number = 1000;
+    static timeout = 1000;
     static mockData:any;
     static interceptors = {
-        request: ()=>{},
-        response: ()=>{},
-        validateExpiration:()=>{}
+        request: function(){console.log("Before requesr")},
+        response: function(){console.log("After response")},
+        validateExpiration: function(){console.log("validate response")}
     };
 
     constructor(options)
@@ -27,8 +23,8 @@ class Resource
 
     sendRequest(options): Promise<any>
     {
-        let customHeaders = this.GetHeadersHandler;
 
+        const customHeaders = this.GetHeadersHandler;
         if(!options.type) options.type = "GET";
 
         if(customHeaders)
@@ -38,13 +34,13 @@ class Resource
         }
 
         Resource.interceptors.request();
-        let promise = new Promise((resolve, reject) => {
+        const promise = new Promise((resolve, reject) => {
             // Clousure
-            let mockData = Resource.mockData;
+            const mockData = Resource.mockData;
             this.logRequest(options);
             setTimeout(() => {
                 Resource.interceptors.response();
-                Resource.interceptors.validateExpiration()
+                Resource.interceptors.validateExpiration();
                
                 resolve(mockData);
             }, Resource.timeout);
@@ -58,11 +54,9 @@ class Resource
         if(options.headers)
         {
             console.log("With headers:");
-            for(let key in options.headers) console.log(key + ":" + options.headers[key]);
+            for(const key in options.headers) console.log(key + ":" + options.headers[key]);
         }
     }
-
-    
 }
 
 export default Resource;

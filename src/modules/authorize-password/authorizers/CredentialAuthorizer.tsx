@@ -13,7 +13,7 @@ class CredentialsAuthorizer implements IAuthorizer{
     }
 
     authorize(): Promise<any> {
-        let options = {
+        const options = {
             url: "/users/authorize",
             type: "post"
         };

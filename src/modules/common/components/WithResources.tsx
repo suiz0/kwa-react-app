@@ -3,7 +3,7 @@ import Resource from '../services/Resource';
 import AppProfile from '../services/AppProfile';
 
 const getResourceList = (services) => {
-    let resources = {};
+    const resources = {};
     services.forEach((service) => {
         if(!AppProfile.Resources[service.key])
             AppProfile.Resources[service.key] = new Resource({baseURL: service.url});

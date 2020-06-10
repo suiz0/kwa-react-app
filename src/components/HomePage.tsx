@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {getCurrentSchemaTest} from '../modules/auth/actions/AuthActions'
+import {getCurrentSchemaTest} from '../modules/auth/store/actions/AuthActions';
 
 
 const HomePage = (props) => {

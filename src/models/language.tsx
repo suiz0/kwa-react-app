@@ -18,7 +18,7 @@ class Language {
 
     get(options?): Promise<any>
     {
-        let opt = Object.assign({}, options ? options:{});
+        const opt = Object.assign({}, options ? options:{});
         Resource.mockData = langData;
 
         opt.type="get";
@@ -28,7 +28,7 @@ class Language {
 }
 
 const GetLanguage = (props?) => {
-    let lang =  new Language(props?props:null);
+    const lang =  new Language(props?props:null);
     return lang.get();
 }
 
