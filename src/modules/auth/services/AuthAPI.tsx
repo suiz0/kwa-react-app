@@ -50,15 +50,7 @@ class AuthAPI
         this.resource = props? props.resource:null;
     }
 
-    isValidKey() {
-        // Read key from storage and validate it
-        let valid = true;
-
-        if(valid) return Promise.resolve();
-        return Promise.reject(true);
-    }
-
-    send(options) {
+    fetch(options) {
         return this.resource.sendRequest(options);
     }
 

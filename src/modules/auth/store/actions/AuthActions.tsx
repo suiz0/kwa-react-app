@@ -23,6 +23,30 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispa
     );
 }
 
+// Makes request with authorization headers
+export const MakeRequest = (options) => (dispatch, getState)=> {
+
+    const {isValidKey, authenticated, expireTimeout} = getState().authUser;
+    let auth = AuthAPIProvider.create();
+
+    if(isValidKey && authenticated){
+        if(Date.now() > expireTimeout){
+            dispatch(RequestAuthentication);
+            dispatch(SetInValidApiKey);
+        }else{
+            dispatch(IncreaseExpirationTimeout);
+            auth.fetch(options)
+            .then((response)=> {
+                dispatch(success(response));
+            })
+            .catch(errorMsg=>error(errorMsg))
+        }
+    }
+
+    function success(response) {return {type: "REQUEST_SUCCESS", data: response}};
+    function error(error) {return {type: "REQUEST_ERROR", message: error}};
+}
+
 export const Authorize = (authorizer) => async(dispatch: any)=>
 {
     let auth = AuthAPIProvider.create();
