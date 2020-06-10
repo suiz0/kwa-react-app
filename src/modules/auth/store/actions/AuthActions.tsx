@@ -79,6 +79,9 @@ export const Authorize = (authorizer) => async(dispatch: any)=>
 
         }else{
             dispatch(SetInValidApiKey());
+            dispatch({ 
+                type: authConstants.SET_UNAUTHENTICATED
+            })
             console.log('Invalid Response');
             General.RemoveItem("token")
             General.RemoveItem("auth.apikey");
