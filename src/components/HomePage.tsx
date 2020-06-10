@@ -17,7 +17,6 @@ const HomePage = (props) => {
              :props.t ? props.t('Home Page'): 'Home Page'}
              </div>                   
         </div>
-        
       </div>
     )
   

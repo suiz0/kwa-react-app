@@ -52,6 +52,11 @@ export default function (state = initialState, action:any) {
             ...state,
             validetaApiExp: true
             };
+        case authConstants.REMOVE_VALIDATE_APIKEY_EXP:
+            return {
+             ...state,
+            validetaApiExp: false
+            };
         case authConstants.SET_EXPIRATION_TIMEOUT:
             return {
             ...state,

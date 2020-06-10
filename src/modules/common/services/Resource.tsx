@@ -7,7 +7,8 @@ class Resource
     static mockData:any;
     static interceptors = {
         request: function(){console.log("Before requesr")},
-        response: function(){console.log("After response")}
+        response: function(){console.log("After response")},
+        validateExpiration: function(){console.log("validate response")}
     };
 
     constructor(options)
@@ -22,8 +23,8 @@ class Resource
 
     sendRequest(options): Promise<any>
     {
-        const customHeaders = this.GetHeadersHandler;
 
+        const customHeaders = this.GetHeadersHandler;
         if(!options.type) options.type = "GET";
 
         if(customHeaders)
@@ -39,6 +40,8 @@ class Resource
             this.logRequest(options);
             setTimeout(() => {
                 Resource.interceptors.response();
+                Resource.interceptors.validateExpiration();
+               
                 resolve(mockData);
             }, Resource.timeout);
         });
@@ -54,8 +57,6 @@ class Resource
             for(const key in options.headers) console.log(key + ":" + options.headers[key]);
         }
     }
-
-    
 }
 
 export default Resource;

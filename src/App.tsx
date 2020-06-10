@@ -29,7 +29,7 @@ import Models, {Language} from './models';
 import I18N from './modules/i18n';
 import AuthorizePassword from './modules/authorize-password/';
 //REDUX 
-import {getCurrentSchema} from './modules/auth/store/actions/AuthActions';
+import {getCurrentSchema, ValidateExpirationTimeout} from './modules/auth/store/actions/AuthActions';
 import ProfileActions from './store/actions/AppActions';
 import { connect } from "react-redux";
 
@@ -42,6 +42,11 @@ const App = (props:any) => {
   Resource.interceptors.response = ()=> {
     props.dispatch(ProfileActions.stopLoading);
   }
+
+  Resource.interceptors.validateExpiration = ()=> {
+    props.dispatch(ValidateExpirationTimeout());
+  }
+  
 
   useEffect(() => {
     // componentDidMount
@@ -108,6 +113,7 @@ const AppContainer = (props) => {
 
 //Connect app to the store(AppProfile)
 const mapStateToProps = state => {
+  console.log('MapState',state);
   return {
     profile: state.AppProfile,
     langs: state.AppProfile.langs,

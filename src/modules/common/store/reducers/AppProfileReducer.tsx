@@ -41,6 +41,7 @@ export default (state, action) => {
                 isLoading: false
             }
             break;      
+
         default:
             newState= !state ? initialState: state;
 

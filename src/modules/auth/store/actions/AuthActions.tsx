@@ -23,6 +23,20 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispa
     );
 }
 
+export const getCurrentSchemaTest = (auth:AuthAPI) => async(dispatch:any)=>
+{
+    auth.getScheme()
+            .then(
+                response => { 
+                    if(response.IsAuthorizePassword){
+                        console.log('Un Si de Prueba');
+                    }
+                        
+                }
+            );
+   
+}
+
 // Makes request with authorization headers
 export const MakeRequest = (options, metadata) => async(dispatch, getState)=> {
     const {validetaApiExp, expireTimeout} = getState().AuthUser;
@@ -95,18 +109,22 @@ export const RequestAuthentication = () => async(dispatch: any)=>
     dispatch({ type: authConstants.ADD_REQUEST_VALIDATION });
 }
 
-export const SetExpirationTimeout = (auth:AuthAPI) => (dispatch: any)=>
+export const SetExpirationTimeout = (auth:AuthAPI) => async(dispatch: any)=>
 {
     auth.getPlatformSettings()
             .then(
                 response => { 
+                    console.log('getPlatformSettings',response);
                     dispatch({ 
                         type: authConstants.SET_EXPIRATION_TIMEOUT, 
                         timeout: response.timeout
-                    });
+                    })
                     dispatch({ 
                         type: authConstants.SET_AUTHENTICATED
-                    });
+                    })
+                    dispatch({ 
+                        type: authConstants.VALIDATE_APIKEY_EXP
+                    })
                 }
             );
    

@@ -76,6 +76,7 @@ class AuthAPI
         opts.type="get";
         opts.url = "/platformsettings/";
         General.Resource.mockData = platformSettings;
+        console.log('MockedData', General.Resource.mockData);
         return this.resource.sendRequest(opts);
     }
 

@@ -10,8 +10,13 @@ const stopLoading = dispatch => {
     dispatch({type: "STOP_LOADING"});
 }
 
+const getUIplugins = dispatch => {
+    dispatch({type: "GET_PLUGINS"});
+}
+
 export default {
     setLang,
     startLoading,
-    stopLoading
+    stopLoading,
+    getUIplugins
 }

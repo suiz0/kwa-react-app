@@ -10,5 +10,8 @@
     "Enter your password": "Enter your password",
     "Name": "Name",
     "Description": "Description"
-
+    "loading...": "Loading...",
+    "Try": "Try",
+    "Ooops!": "Ooops!",
+    "Invalid Credentials": "Invalid Username/Password"
 }
