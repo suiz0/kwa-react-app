@@ -113,7 +113,6 @@ const AppContainer = (props) => {
 
 //Connect app to the store(AppProfile)
 const mapStateToProps = state => {
-  console.log('MapState',state);
   return {
     profile: state.AppProfile,
     langs: state.AppProfile.langs,
