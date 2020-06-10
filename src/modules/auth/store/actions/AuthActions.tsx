@@ -23,20 +23,6 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispa
     );
 }
 
-export const getCurrentSchemaTest = (auth:AuthAPI) => async(dispatch:any)=>
-{
-    auth.getScheme()
-            .then(
-                response => { 
-                    if(response.IsAuthorizePassword){
-                        console.log('Un Si de Prueba');
-                    }
-                        
-                }
-            );
-   
-}
-
 // Makes request with authorization headers
 export const MakeRequest = (options, metadata) => async(dispatch, getState)=> {
     const {validetaApiExp, expireTimeout} = getState().AuthUser;
@@ -63,7 +49,6 @@ export const MakeRequest = (options, metadata) => async(dispatch, getState)=> {
     function success(response, metadata) {return{type: "REQUEST_SUCCESS", data: response, ...metadata}}
     function error(error, metadata) {return {type: "REQUEST_ERROR", message: error, ...metadata}}
 }
-                
 
 export const Authorize = (authorizer) => async(dispatch: any)=>
 {

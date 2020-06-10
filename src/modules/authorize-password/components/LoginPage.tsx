@@ -37,7 +37,7 @@ class LoginPage extends React.Component<WithTranslation & any> {
             if(prevProps.authUser !== this.props.authUser) {
                 this.setState({isLoading: false});
                 if(!this.props.authUser.isValidKey) this.setState({hasInvalidCredentials: true});
-            };
+            }
         }
       }
 
