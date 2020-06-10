@@ -1,0 +1,51 @@
+   { "rows": [{
+      "id": "1",
+      "name": "Accordion",
+      "description": "Displays collapsible content panels for presenting information in a limited amount of space",
+      "source": "React"
+    },
+    {
+        "id": "2",
+        "name": "Button",
+        "description": "Enhances standard form elements like buttons, inputs and anchors to themeable buttons with appropriate hover and active styles.",
+        "source": "React"
+    },
+    {
+        "id": "3",
+        "name": "Dialog",
+        "description": "Open content in an interactive overlay.",
+        "source": "React"
+    },
+    {
+        "id": "4",
+        "name": "Menu",
+        "description": "Themeable menu with mouse and keyboard interactions for navigation.",
+        "source": "React"
+    },
+    {
+        "id": "5",
+        "name": "Slider",
+        "description": "Drag a handle to select a numeric value",
+        "source": "React"
+    },
+    {
+        "id": "6",
+        "name": "Tab",
+        "description": "A single content area with multiple panels, each associated with a header in a list.",
+        "source": "React"
+    }],
+    "headers":[
+        {
+          "key": "name",
+          "header": "Name"
+        },
+        {
+          "key": "description",
+          "header": "Description"
+        },
+        {
+          "key": "source",
+          "header": "Framework"
+        }
+      ]
+    }

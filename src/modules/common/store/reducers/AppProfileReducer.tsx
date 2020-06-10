@@ -41,6 +41,14 @@ export default (state, action) => {
                 isLoading: false
             }
             break;
+        case "GET_PLUGINS":
+            newState = {
+                ...state,
+                rows: action.rows,
+                headers: action.headers
+            };
+                break;
+            
         default:
             newState= !state ? initialState: state;
 

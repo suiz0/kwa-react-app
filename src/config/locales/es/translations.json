@@ -7,5 +7,7 @@
     "Send": "Enviar",
     "Cancel": "Cancelar",
     "Enter your username": "Ingresa tu usuario",
-    "Enter your password": "Ingresa tu contrasenia"
+    "Enter your password": "Ingresa tu contrasenia",
+    "Name": "Nombre",
+    "Description": "Descripcion"
 }
