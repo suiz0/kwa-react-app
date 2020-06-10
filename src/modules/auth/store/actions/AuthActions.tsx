@@ -48,7 +48,6 @@ export const MakeRequest = (options, metadata) => async(dispatch, getState)=> {
     function success(response, metadata) {return{type: "REQUEST_SUCCESS", data: response, ...metadata}}
     function error(error, metadata) {return {type: "REQUEST_ERROR", message: error, ...metadata}}
 }
-                
 export const Authorize = (authorizer) => async(dispatch: any)=>
 {
     //authorizer should have the instance created in factory, Key or Token authorizer

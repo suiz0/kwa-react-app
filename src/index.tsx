@@ -12,9 +12,9 @@ I18N.configure(Config["i18nResources"]);
 const context = new AppProfile();
 
 ReactDOM.render(
-  <Bootstrap config={Config} profile={context} ready={(props)=>{ 
+  <Bootstrap config={Config} profile={context} ready={(props)=>{
      return (
-      <Provider store={StoreMaker(props.profile)}>
+      <Provider store={StoreMaker({AppProfile: props.profile})}>
         <App {...props.config} /> 
       </Provider>)}}/>,
   document.getElementById('root')
