@@ -4,9 +4,9 @@
   "description": "A sample react app",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --open",
-    "build": "webpack",
-    "start:prod": "webpack --mode production",
+    "start": "webpack-dev-server --open --config=webpack.config.dev.js",
+    "build": "webpack --config=webpack.config.prod.js",
+    "build:dev":"webpack --config=webpack.config.dev.js",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "test": "jest"
   },

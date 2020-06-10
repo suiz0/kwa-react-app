@@ -6,7 +6,8 @@ const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 module.exports = {
     entry: "./src/index.tsx",
     target: "web",
-    mode: "development",
+    devtool:"source-map",
+    mode: "production",
     output: {
         path: path.resolve(__dirname, "build"),
         filename: "bundle.js"
@@ -18,7 +19,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(ts|tsx)$/,
-                loader: "awesome-typescript-loader"
+                loader: "awesome-typescript-loader",
             },
             {
                 enforce: "pre",
