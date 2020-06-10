@@ -9,7 +9,7 @@ const getLangs = (resource) => dispatch => {
     });
 }
 
-const getUIplugins = (resource) => (dispatch, getState) => {
+const getUIplugins = (resource) => (dispatch) => {
   dispatch(MakeRequest(Models.GetUIPlugins({resource: resource}), {reducer: "pluginlist"}))
 }
 

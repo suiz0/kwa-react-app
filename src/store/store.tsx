@@ -12,6 +12,7 @@ interface Window {
 }
 
 const localReducers =  combineReducers({AppProfile: AppReducer, AuthUser: AuthReducer});
+
 const composeEnhacer = typeof window === 'object' &&
 window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
