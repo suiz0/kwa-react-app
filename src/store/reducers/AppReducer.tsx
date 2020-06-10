@@ -10,10 +10,18 @@ export default (state, action) => {
                 lang: action.lang
             };
             break;
+        case "AUTH_LOGIN_LOAD":
         case authConstants.ADD_REQUEST_VALIDATION:
             return {
                 ...state,
-                goto: '/login'
+                path: '/login'
+            }
+            break;
+        case "AUTH_LOGIN_CANCEL":
+        case authConstants.REMOVE_REQUEST_VALIDATION:
+            return {
+                ...state,
+                path:'/'
             }
             break;
         default:

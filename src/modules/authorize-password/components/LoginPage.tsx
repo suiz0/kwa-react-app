@@ -5,7 +5,7 @@ import {withTranslation, WithTranslation} from 'react-i18next';
 import AuthAPI, {AuthAPIProvider} from '../../auth/services/AuthAPI';
 import CredentialsAuthorizer from '../authorizers/CredentialAuthorizer';
 import AuthConfig from '../../auth/services/AuthConfig';
-import {Authorize} from '../../auth/store/actions/AuthActions';
+import {Authorize } from '../../auth/store/actions/AuthActions';
 
 class LoginPage extends React.Component<WithTranslation & any> {
 
@@ -27,21 +27,16 @@ class LoginPage extends React.Component<WithTranslation & any> {
         this.resetValidationError = this.resetValidationError.bind(this);
     }
 
-    componentDidUpdate(prevProps)
-    {
-        if(this.props.authUser.authenticated) // this might change but for now is ok
-            this.props.history.push('/');
-    }
-
     onClose = () => {
-        this.props.history.push('/');
+        this.props.dispatch({type:"AUTH_LOGIN_CANCEL"});
     }
 
+    // Validate form inputs
     validate()
     {
         let ctrl: any;
         let isValid = true;
-        const validationErrors = {};
+        let validationErrors = {};
         for(ctrl in this.form.current)
         {
             if(this.form.current[ctrl] && this.form.current[ctrl].nodeName && this.form.current[ctrl].nodeName === "INPUT")
@@ -59,10 +54,10 @@ class LoginPage extends React.Component<WithTranslation & any> {
         this.setState({isLoading: true});
         if(this.validate()) 
         {
-            this.props.dispatch(Authorize(this.props.history, new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]})));
+            this.props.dispatch(Authorize(new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]})));
             setTimeout(()=>{
                 this.setState({isLoading: false});
-            }, 1200);
+            }, 1000);
         }
         else{
             this.setState({isLoading: false});

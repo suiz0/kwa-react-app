@@ -3,7 +3,7 @@ import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI, AuthAPIProvider} from '
 import General, {  Resource } from '../../../common';
 import {GetAuthHeaders} from '../../services/AuthAPI'
 
-export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) => async(dispatch:any)=>
+export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispatch:any)=>
 {
     auth.getScheme()
     .then(response => { 
@@ -16,14 +16,14 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource, history:any) =
                     dispatch(RequestAuthentication());
                 } else
                 {
-                   dispatch(Authorize(history, authorizer));
+                   dispatch(Authorize(authorizer));
                 }
             }
         }
     );
 }
 
-export const Authorize = (history:any, authorizer?) => async(dispatch: any)=>
+export const Authorize = (authorizer) => async(dispatch: any)=>
 {
     let auth = AuthAPIProvider.create();
 
@@ -34,7 +34,6 @@ export const Authorize = (history:any, authorizer?) => async(dispatch: any)=>
             dispatch(SetValidApiKey(response.expiresat));
             dispatch(RemoveAuthentication());
             dispatch(SetExpirationTimeout(auth));
-            history.push('/'); // This seems pretty wrong! 
 
         }else{
             dispatch(SetInValidApiKey());
@@ -42,7 +41,6 @@ export const Authorize = (history:any, authorizer?) => async(dispatch: any)=>
             General.RemoveItem("token")
             General.RemoveItem("auth.apikey");
             General.RemoveItem("auth.expiresat");
-            history.push('/login');
         }
     }
     );

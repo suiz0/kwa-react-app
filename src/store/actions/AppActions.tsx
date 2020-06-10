@@ -8,7 +8,12 @@ const getLangs = (resource) => dispatch => {
     });
 }
 
+const loadLogin = dispatch => {
+  dispatch({type: "AUTH_LOGIN_LOAD"});
+}
+
 export default {
     ...ProfileActions,
-    getLangs
+    getLangs,
+    loadLogin
 }

@@ -48,7 +48,7 @@ const App = (props:any) => {
     // Get terminology
     props.dispatch(ProfileActions.getLangs(props.resources["aperture"]));
     
-    _getSchema(props.auth, props.resources["aperture"], props.history);
+    _getSchema(props.auth, props.resources["aperture"]);
     
   }, []);
   
@@ -57,11 +57,11 @@ const App = (props:any) => {
   },[props.profile.lang]);
 
   useEffect(() => {
-    props.history.push(props.profile.goto);
-  },[props.profile.goto]);
+    props.history.push(props.profile.path);
+  },[props.profile.path]);
 
-  const _getSchema =(auth:AuthAPI, resource:Resource, history:any) =>{
-   props.dispatch(getCurrentSchema(auth, resource, history));
+  const _getSchema =(auth:AuthAPI, resource:Resource) =>{
+   props.dispatch(getCurrentSchema(auth, resource));
   }
 
   return (
@@ -77,7 +77,7 @@ const App = (props:any) => {
             </HeaderMenu>
           </HeaderNavigation>
           <HeaderGlobalBar aria-label="system actions">
-            <HeaderGlobalAction aria-label="admin option" isActive onClick={()=>{ props.history.push('/login')}}> 
+            <HeaderGlobalAction aria-label="admin option" isActive onClick={()=>{ props.dispatch(ProfileActions.loadLogin) }}> 
               <Components.AdminOption {...props} />
             </HeaderGlobalAction>
           </HeaderGlobalBar>
