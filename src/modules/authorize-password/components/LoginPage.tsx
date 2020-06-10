@@ -36,7 +36,7 @@ class LoginPage extends React.Component<WithTranslation & any> {
     {
         let ctrl: any;
         let isValid = true;
-        let validationErrors = {};
+        const validationErrors = {};
         for(ctrl in this.form.current)
         {
             if(this.form.current[ctrl] && this.form.current[ctrl].nodeName && this.form.current[ctrl].nodeName === "INPUT")
@@ -66,7 +66,7 @@ class LoginPage extends React.Component<WithTranslation & any> {
 
     resetValidationError(ev)
     {
-        let errors = 
+        const errors = 
         {
             ...this.state.validationErrors,
             [ev.target.id]:null

@@ -2,7 +2,7 @@ import profile from '../../services/AppProfile';
 import actions from '../ProfileConstants';
 //import {authConstants} from '../../../../data/constants';
 
-let initialState = new profile();
+const initialState = new profile();
 
 export default (state, action) => {
     let newState;

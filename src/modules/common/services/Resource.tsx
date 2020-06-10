@@ -1,16 +1,13 @@
-import General from '..';
-import {IncreaseExpirationTimeout, RequestAuthentication, SetInValidApiKey} from '../../auth/store/actions/AuthActions'
-
 class Resource
 {
     baseURL: string;
     GetHeadersHandler: any;
 
-    static timeout: number = 1000;
+    static timeout = 1000;
     static mockData:any;
     static interceptors = {
-        request: ()=>{},
-        response: ()=>{}
+        request: function(){console.log("Before requesr")},
+        response: function(){console.log("After response")}
     };
 
     constructor(options)
@@ -25,24 +22,7 @@ class Resource
 
     sendRequest(options): Promise<any>
     {
-       /* const {isValidKey, authenticated, expireTimeout} = store.getState().authUser;
-        if(isValidKey && authenticated){
-            if(Date.now() > expireTimeout){
-                store.dispatch(RequestAuthentication);
-                store.dispatch(SetInValidApiKey);
-                const promise = new Promise((resolve, reject) => {
-                    console.log('Session Expired, Call Aborted')
-                    setTimeout(() => {
-                        reject('Session Expired, Call Aborted');
-                    }, Resource.timeout);
-                });
-                return promise;
-            }else{
-                store.dispatch(IncreaseExpirationTimeout);
-            }
-              
-        }*/
-        let customHeaders = this.GetHeadersHandler;
+        const customHeaders = this.GetHeadersHandler;
 
         if(!options.type) options.type = "GET";
 
@@ -53,9 +33,9 @@ class Resource
         }
 
         Resource.interceptors.request();
-        let promise = new Promise((resolve, reject) => {
+        const promise = new Promise((resolve, reject) => {
             // Clousure
-            let mockData = Resource.mockData;
+            const mockData = Resource.mockData;
             this.logRequest(options);
             setTimeout(() => {
                 Resource.interceptors.response();
@@ -71,7 +51,7 @@ class Resource
         if(options.headers)
         {
             console.log("With headers:");
-            for(let key in options.headers) console.log(key + ":" + options.headers[key]);
+            for(const key in options.headers) console.log(key + ":" + options.headers[key]);
         }
     }
 

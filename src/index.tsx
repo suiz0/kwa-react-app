@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import  {StoreMaker}  from './store/store';
 
 I18N.configure(Config["i18nResources"]);
-let context = new AppProfile();
+const context = new AppProfile();
 
 ReactDOM.render(
   <Bootstrap config={Config} profile={context} ready={(props)=>{ 

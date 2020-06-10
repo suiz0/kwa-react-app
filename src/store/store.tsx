@@ -17,7 +17,7 @@ window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose;
 
 const StoreMaker = (initialState, reducers?, enhancers? ) => {
-    let store = createStore(
+    const store = createStore(
         reducers || localReducers, 
         initialState, 
         enhancers || 

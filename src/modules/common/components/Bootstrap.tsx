@@ -2,13 +2,15 @@ import React from 'react';
 import {load} from '../services/Config';
 import AppProfile from '../services/AppProfile';
 
+declare type callback = (props:any) =>any
+
 interface BootstrapComponentProps {
-    ready: Function;
+    ready: callback;
     profile: AppProfile;
-    config: {}
+    config: any
 }
 
-class Bootstrap extends React.Component<BootstrapComponentProps, {config: {}, isloading: boolean, profile: AppProfile}>
+class Bootstrap extends React.Component<BootstrapComponentProps, {config: any, isloading: boolean, profile: AppProfile}>
 {
     constructor(props)
     {
@@ -24,7 +26,7 @@ class Bootstrap extends React.Component<BootstrapComponentProps, {config: {}, is
     {
         load()
         .then((config) => {
-            let profile = {
+            const profile = {
                 ...this.state.profile,
                 client: config.client
             }

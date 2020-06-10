@@ -24,7 +24,7 @@ const AuthorizerMaker = (): IAuthorizer | null => {
     return null;
 }
 
-const AuthAPIProvider: {instance: null | AuthAPI, create: Function} = {
+const AuthAPIProvider: {instance: null | AuthAPI, create:(options?:any)=>AuthAPI} = {
     instance: null,
     create: function(options): AuthAPI {
         if(this.instance === null)
@@ -56,7 +56,7 @@ class AuthAPI
 
     // Get Auth Scheme
     getScheme(options?): Promise<AuthScheme> {
-        let opts = Object.assign({}, options||{});
+        const opts = Object.assign({}, options||{});
 
         if(this.resource===null) this.resource = AppProfile.Resources[AuthConfig.servicekey];
 
@@ -67,7 +67,7 @@ class AuthAPI
     }
 
     getPlatformSettings(options?): Promise<any> {
-        let opts = Object.assign({}, options||{});
+        const opts = Object.assign({}, options||{});
 
         if(this.resource===null) this.resource = AppProfile.Resources[AuthConfig.servicekey];
         opts.type="get";

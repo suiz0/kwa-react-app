@@ -9,7 +9,7 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispa
     .then(response => { 
             if(response.IsAuthorizePassword){
                 dispatch({type: authConstants.SET_AUTHORIZE_PASSWORD_SCHEME});
-                let authorizer = AuthorizerMaker();
+                const authorizer = AuthorizerMaker();
 
                 if(!authorizer)
                 {
@@ -24,12 +24,12 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispa
 }
 
 // Makes request with authorization headers
-export const MakeRequest = (options) => (dispatch, getState)=> {
+export const MakeRequest = (options, metadata) => (dispatch, getState)=> {
 
     const {isValidKey, authenticated, expireTimeout} = getState().authUser;
-    let auth = AuthAPIProvider.create();
+    const auth = AuthAPIProvider.create();
 
-    if(isValidKey && authenticated){
+    if(isValidKey && authenticated) {
         if(Date.now() > expireTimeout){
             dispatch(RequestAuthentication);
             dispatch(SetInValidApiKey);
@@ -43,13 +43,13 @@ export const MakeRequest = (options) => (dispatch, getState)=> {
         }
     }
 
-    function success(response) {return {type: "REQUEST_SUCCESS", data: response}};
-    function error(error) {return {type: "REQUEST_ERROR", message: error}};
+    function success(response) {return {type: "REQUEST_SUCCESS", data: response, ...metadata}}
+    function error(error) {return {type: "REQUEST_ERROR", message: error}}
 }
 
 export const Authorize = (authorizer) => async(dispatch: any)=>
 {
-    let auth = AuthAPIProvider.create();
+    const auth = AuthAPIProvider.create();
 
     auth.authorize(authorizer)
     .then(

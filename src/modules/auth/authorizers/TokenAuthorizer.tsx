@@ -20,7 +20,7 @@ class TokenAuthorizer implements IAuthorizer {
     }
 
     authorize(): Promise<any> {
-        let options = {
+        const options = {
             url: '/authenticationToken/session',
             type: 'post',
             headers: this.GetTokenHeaders()
