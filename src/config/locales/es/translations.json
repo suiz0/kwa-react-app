@@ -2,10 +2,14 @@
     "Admin": "Admino",
     "Home Page": "Pagina de Inicio",
     "Username": "Usuario",
-    "Password": "Contrasena",
+    "Password": "Contraseña",
     "Identify yourself": "Identificate",
     "Send": "Enviar",
     "Cancel": "Cancelar",
     "Enter your username": "Ingresa tu usuario",
-    "Enter your password": "Ingresa tu contrasenia"
+    "Enter your password": "Ingresa tu contraseña",
+    "loading...": "Cargando...",
+    "Try": "Acceso:",
+    "Ooops!": "Ooops!",
+    "Invalid Credentials": "Usuario/Contraseña invalidos"
 }

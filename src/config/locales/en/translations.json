@@ -7,5 +7,9 @@
     "Send": "Send",
     "Cancel": "Cancel",
     "Enter your username": "Enter your username",
-    "Enter your password": "Enter your password"
+    "Enter your password": "Enter your password",
+    "loading...": "Loading...",
+    "Try": "Try",
+    "Ooops!": "Ooops!",
+    "Invalid Credentials": "Invalid Username/Password"
 }

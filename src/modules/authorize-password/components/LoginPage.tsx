@@ -10,13 +10,13 @@ import {Authorize } from '../../auth/store/actions/AuthActions';
 class LoginPage extends React.Component<WithTranslation & any> {
 
     form;
-    authRequired;
-
+    unload=false;
     state = {
         user: '',
         password: '',
         isLoading: false,
-        validationErrors: {}
+        validationErrors: {},
+        hasInvalidCredentials: false
     }
 
     constructor(props)
@@ -26,6 +26,20 @@ class LoginPage extends React.Component<WithTranslation & any> {
 
         this.resetValidationError = this.resetValidationError.bind(this);
     }
+
+    componentWillUnmount()
+    {
+        this.unload = true;
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!this.unload) {
+            if(prevProps.authUser !== this.props.authUser) {
+                this.setState({isLoading: false});
+                if(!this.props.authUser.isValidKey) this.setState({hasInvalidCredentials: true});
+            };
+        }
+      }
 
     onClose = () => {
         this.props.dispatch({type:"AUTH_LOGIN_CANCEL"});
@@ -51,13 +65,10 @@ class LoginPage extends React.Component<WithTranslation & any> {
     }
 
     onSend = () => {
-        this.setState({isLoading: true});
+        this.setState({isLoading: true, hasInvalidCredentials: false});
         if(this.validate()) 
         {
             this.props.dispatch(Authorize(new CredentialsAuthorizer({credential:this.state, resource: AppProfile.Resources[AuthConfig.servicekey]})));
-            setTimeout(()=>{
-                this.setState({isLoading: false});
-            }, 1000);
         }
         else{
             this.setState({isLoading: false});
@@ -102,8 +113,14 @@ class LoginPage extends React.Component<WithTranslation & any> {
         hideCloseButton={true}
         iconDescription="describes the close button"
         kind="info"
-        subtitle={this.props.t('User') + ": " + Config.credential.user + ' ' + this.props.t('Password') + ": " + Config.credential.password}
+        subtitle={this.props.t('Username') + ": " + Config.credential.user + ' ' + this.props.t('Password') + ": " + Config.credential.password}
         title={this.props.t("Try")} className="bx--inline-notification-full-width" />
+         {this.state.hasInvalidCredentials?
+        <InlineNotification
+        hideCloseButton={true}
+        kind="error"
+        subtitle={this.props.t("Invalid Credentials")}
+        title={this.props.t("Ooops!")} className="bx--inline-notification-full-width" />: ""}
         <form ref={this.form}>
                 <TextInput
                     id="user"
