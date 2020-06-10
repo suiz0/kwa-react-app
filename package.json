@@ -21,6 +21,8 @@
     "@types/carbon-components-react": "^7.10.5",
     "@types/enzyme": "^3.10.5",
     "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
     "@types/jest": "^25.2.3",
     "@types/react-router-dom": "^5.1.5",
     "@typescript-eslint/eslint-plugin": "^3.1.0",
@@ -45,10 +47,7 @@
     "webpack-dev-server": "^3.11.0"
   },
   "dependencies": {
-    "-": "0.0.1",
     "@carbon/icons-react": "^10.11.0",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
     "carbon-components": "^10.12.0",
     "carbon-components-react": "^7.12.0",
     "carbon-icons": "^7.0.7",
@@ -60,7 +59,6 @@
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "save": "^2.4.0"
+    "redux-thunk": "^2.3.0"
   }
 }
