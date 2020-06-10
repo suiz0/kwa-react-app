@@ -1,6 +1,7 @@
 import {Resource} from '../modules/common';
 import plugins from '../data/uiplugins.json';
 
+
 class UIPlugins {
 
     url = "";
@@ -16,15 +17,14 @@ class UIPlugins {
         this.resource = options.resource;
     }
 
-    get(options?): Promise<any>
+    get(options?)
     {
-        console.log('If I am here I am good')
         const opt = Object.assign({}, options ? options:{});
         Resource.mockData = plugins;
 
         opt.type="get";
         opt.url= this.url;
-        return this.resource.sendRequest(opt);
+        return opt;
     }
 }
 

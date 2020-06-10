@@ -20,7 +20,8 @@ export default function (state = initialState, action:any) {
         case authConstants.SET_AUTHENTICATED:
         return {
             ...state,
-            authenticated: true
+            authenticated: true,
+            validetaApiExp: true
         };
         case authConstants.SET_UNAUTHENTICATED:
             return initialState;
