@@ -37,14 +37,14 @@ export const MakeRequest = (options, metadata) => (dispatch, getState)=> {
             dispatch(IncreaseExpirationTimeout);
             auth.fetch(options)
             .then((response)=> {
-                dispatch(success(response));
+                dispatch(success(response, metadata));
             })
-            .catch(errorMsg=>error(errorMsg))
+            .catch(errorMsg=>error(errorMsg, metadata))
         }
     }
 
-    function success(response) {return {type: "REQUEST_SUCCESS", data: response, ...metadata}}
-    function error(error) {return {type: "REQUEST_ERROR", message: error}}
+    function success(response, metadata) {return {type: "REQUEST_SUCCESS", data: response, ...metadata}}
+    function error(error, metadata) {return {type: "REQUEST_ERROR", message: error, ...metadata}}
 }
 
 export const Authorize = (authorizer) => async(dispatch: any)=>
