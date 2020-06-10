@@ -8,14 +8,14 @@ configure({ adapter: new Adapter() });
 let component;
 
 test('renders without crashing', () => {
-    component = shallow(<HomePage />);
+    component = shallow(<HomePage authUser={{authenticated:false}} />);
     expect(component).toMatchSnapshot();
 });
 
 describe('Composition tests', () => {
 
     beforeEach(()=> {
-        component = shallow(<HomePage />);
+        component = shallow(<HomePage authUser={{authenticated:false}} />);
     });
 
     test('renders a div with bx--grid class', ()=> {
