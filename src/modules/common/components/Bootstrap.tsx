@@ -36,14 +36,15 @@ class Bootstrap extends React.Component<BootstrapComponentProps, {config: any, i
 
     render()
     {
+        // When configuration is loaded executes ready method
         if(!this.state.isloading)
         {
             return this.props.ready({config:this.state.config, profile: this.state.profile});
         }
 
+        // While configuration is loaded prints Loading "indicator"
         return <div>Loading...</div>;
     }
-    
 }
 
 export default Bootstrap;
