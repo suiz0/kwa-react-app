@@ -3,7 +3,6 @@
 This app simulate a login process flow and serves as a playground for applying all the reactjs knowledge adquired
 
 ## Installation
----
 First clone the repository
 
 ```
@@ -17,7 +16,6 @@ run npm install
 ```
 
 ## Usage
----
 The following commads are avaible through the **npm run** command:
 
 * **start**. Runs the application in dev mode.
@@ -28,7 +26,6 @@ The following commads are avaible through the **npm run** command:
 
 
 ## Start the application
----
 As metioned above the application can be run using the npm run start command
 
 ### Configurations
@@ -40,6 +37,5 @@ The application can be configured through this file
 * **services**. Services to be used in the app
 
 ## Authors
----
 * Esteban Barron
 * Cesar Iduarte
