@@ -14,9 +14,8 @@ describe('Test constructions', () => {
 });
 
 describe('Test interface', () => {
-    const resource = new Resource(options);
-    
     test('has sendRequest method', () => {
+        const resource = new Resource(options);
         expect(resource.sendRequest).toBeDefined();
     });
 
@@ -25,5 +24,17 @@ describe('Test interface', () => {
         Resource.mockData = data;
 
         expect(Resource.mockData).toBeDefined();
+    });
+
+    test('has timeout property set', ()=>{
+        expect(Resource.timeout).toBeDefined();
+        expect(Resource.timeout).toBeLessThanOrEqual(1000);
+    });
+
+    test('returns a Promise from send request method', () =>{
+        const resource = new Resource(options);
+        let ret = resource.sendRequest(options);
+        expect(ret).toBeDefined();
+        expect(ret && ret.then).toBeTruthy();
     });
 });
