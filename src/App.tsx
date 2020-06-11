@@ -21,20 +21,17 @@ import {
 } from "react-router-dom";
 
 import {withTranslation} from 'react-i18next';
-
 import Components from './components';
 import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI} from './modules/auth';
-import General, { withResources,AppProfile, Resource } from './modules/common';
-import Models, {Language} from './models';
+import { withResources,AppProfile, Resource } from './modules/common';
 import I18N from './modules/i18n';
 import AuthorizePassword from './modules/authorize-password/';
 //REDUX 
-import {getCurrentSchema, ValidateExpirationTimeout} from './modules/auth/store/actions/AuthActions';
+import {getCurrentSchema} from './modules/auth/store/actions/AuthActions';
 import ProfileActions from './store/actions/AppActions';
 import { connect } from "react-redux";
 
 const App = (props:any) => {
-
   Resource.interceptors.request = ()=> {
     props.dispatch(ProfileActions.startLoading);
   }
@@ -42,11 +39,6 @@ const App = (props:any) => {
   Resource.interceptors.response = ()=> {
     props.dispatch(ProfileActions.stopLoading);
   }
-
-  Resource.interceptors.validateExpiration = ()=> {
-    props.dispatch(ValidateExpirationTimeout());
-  }
-  
 
   useEffect(() => {
     // componentDidMount
@@ -65,6 +57,7 @@ const App = (props:any) => {
     props.history.push(props.profile.path);
   },[props.profile.path]);
 
+//Validate if schema is Authorize_Password
   const _getSchema =(auth:AuthAPI, resource:Resource) =>{
    props.dispatch(getCurrentSchema(auth, resource));
   }

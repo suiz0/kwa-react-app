@@ -3,12 +3,8 @@ import { DataTable  } from 'carbon-components-react';
 import {withTranslation, WithTranslation} from 'react-i18next';
 import ProfileActions from '../store/actions/AppActions'
 
-
 const { Table, TableContainer, TableHead, TableRow, TableHeader, TableBody, TableCell } = DataTable;
   
-  // We would have a headers array like the following
-  
-
 class PluginsTable extends React.Component<WithTranslation & any> {
 
     constructor(props)
@@ -16,6 +12,7 @@ class PluginsTable extends React.Component<WithTranslation & any> {
         super(props);    
     }
 
+        //Check if validetaApiExp key changes from new props, if so attmept to Load UI Plugis 
       componentDidUpdate(prevProps) {
         if (this.props.authUser.validetaApiExp !== prevProps.authUser.validetaApiExp) {
             this.props.dispatch(ProfileActions.getUIplugins(this.props.resources["aperture"]));

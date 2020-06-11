@@ -10,9 +10,6 @@ import {AppProfile} from '../../common';
 
 // Factory Method
 const AuthorizerMaker = (): IAuthorizer | null => {
-    //General.SetItem('token', 'hardtoken'); //REMOVE THIS LATER
-    //General.RemoveItem('auth.apikey'); //REMOVE THIS LATER
-    //General.RemoveItem('token'); //REMOVE THIS LATER
     switch(true) {
         case General.GetItem('auth.apikey') != null:
             return new KeyAuthorizer({key: General.GetItem('auth.apikey'), resource: AppProfile.Resources[AuthConfig.servicekey]});
@@ -42,7 +39,6 @@ const AuthAPIProvider: {instance: null | AuthAPI, create:(options?:any)=>AuthAPI
 }
 
 
-
 // Auth API Service class
 class AuthAPI
 {
@@ -60,7 +56,7 @@ class AuthAPI
     // Get Auth Scheme
     getScheme(options?): Promise<AuthScheme> {
         const opts = Object.assign({}, options||{});
-
+        
         if(this.resource===null) this.resource = AppProfile.Resources[AuthConfig.servicekey];
 
         opts.type="get";
@@ -68,7 +64,7 @@ class AuthAPI
         General.Resource.mockData = scheme;
         return this.resource.sendRequest(opts);
     }
-
+    //Gets Platform Settings
     getPlatformSettings(options?): Promise<any> {
         const opts = Object.assign({}, options||{});
 

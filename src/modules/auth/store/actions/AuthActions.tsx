@@ -1,7 +1,6 @@
 import { authConstants } from '../../../../data/constants';
-import { AuthScheme, AuthorizerMaker, withAuth, AuthAPI, AuthAPIProvider} from '../..';
+import { AuthorizerMaker, AuthAPI, AuthAPIProvider} from '../..';
 import General, {  Resource } from '../../../common';
-import {GetAuthHeaders} from '../../services/AuthAPI'
 
 export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispatch:any)=>
 {
@@ -23,7 +22,7 @@ export const getCurrentSchema = (auth:AuthAPI, resource:Resource) => async(dispa
     );
 }
 
-// Makes request with authorization headers
+// Makes request with authorization headers, once authenticated all subsequent API calls should call this
 export const MakeRequest = (options, metadata) => async(dispatch, getState)=> {
     const {validetaApiExp, expireTimeout} = getState().AuthUser;
     const auth = AuthAPIProvider.create();
@@ -49,9 +48,9 @@ export const MakeRequest = (options, metadata) => async(dispatch, getState)=> {
     function success(response, metadata) {return{type: "REQUEST_SUCCESS", data: response, ...metadata}}
     function error(error, metadata) {return {type: "REQUEST_ERROR", message: error, ...metadata}}
 }
-
 export const Authorize = (authorizer) => async(dispatch: any)=>
 {
+    //authorizer should have the instance created in factory, Key or Token authorizer
     const auth = AuthAPIProvider.create();
 
     auth.authorize(authorizer)
@@ -102,7 +101,7 @@ export const SetExpirationTimeout = (auth:AuthAPI) => async(dispatch: any)=>
     auth.getPlatformSettings()
             .then(
                 response => { 
-                    console.log('getPlatformSettings',response);
+                    //Prepare api key expiration for subsequent calls
                     dispatch({ 
                         type: authConstants.SET_EXPIRATION_TIMEOUT, 
                         timeout: response.timeout
@@ -122,31 +121,4 @@ export const IncreaseExpirationTimeout = () => (dispatch: any, getState)=>
 {
     dispatch({ type: authConstants.INCREASE_TIMEOUT, 
         sessionExpire: Date.now() + getState().AuthUser.increaseTimeout });
-}
-
-export const ValidateExpirationTimeout = () => async(dispatch: any, getState)=>
-{
-    const {validetaApiExp, expireTimeout} = getState().AuthUser;
-        if(validetaApiExp){
-            console.log('Validating api key exp');
-            if(Date.now() > expireTimeout){
-                console.log('Expired Key. Start Abortion');
-                General.RemoveItem("token")
-                General.RemoveItem("auth.apikey");
-                General.RemoveItem("auth.expiresat");
-                dispatch({ 
-                    type: authConstants.SET_UNAUTHENTICATED
-                })
-                const promise = new Promise((resolve, reject) => {
-                    console.log('Session Expired, Call Aborted')
-                     reject(new Error('Session Expired, Please Sign In again to restore your session'))
-                }).catch(alert);
-                dispatch(RequestAuthentication());
-                return promise;
-            }else{
-                dispatch(IncreaseExpirationTimeout());
-            }
-              
-        }
-   
 }
