@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataTable  } from 'carbon-components-react';
 import {withTranslation, WithTranslation} from 'react-i18next';
-import ProfileActions from '../../../store/actions/AppActions'
+import ProfileActions from '../store/actions/AppActions'
 
 
 const { Table, TableContainer, TableHead, TableRow, TableHeader, TableBody, TableCell } = DataTable;

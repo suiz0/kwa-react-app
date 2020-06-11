@@ -1,5 +1,5 @@
 import React from 'react';
-import PluginsTable from '../modules/common/components/PluginsTable';
+import PluginsTable from './PluginsTable';
 import ProfileActions from '../store/actions/AppActions'
 
 
