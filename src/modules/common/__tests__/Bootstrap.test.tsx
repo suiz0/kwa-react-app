@@ -11,7 +11,7 @@ global.fetch = jest.fn().mockImplementation(()=> {
 });
 
 let component;
-let options = {
+const options = {
     ready: jest.fn(),
     profile: new AppProfile(),
     config: {}
