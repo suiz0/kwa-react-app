@@ -33,7 +33,7 @@ describe('Test interface', () => {
 
     test('returns a Promise from send request method', () =>{
         const resource = new Resource(options);
-        let ret = resource.sendRequest(options);
+        const ret = resource.sendRequest(options);
         expect(ret).toBeDefined();
         expect(ret && ret.then).toBeTruthy();
     });

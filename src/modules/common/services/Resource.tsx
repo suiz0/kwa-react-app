@@ -20,6 +20,8 @@ class Resource
         this.GetHeadersHandler = fn;
     }
 
+    // Makes (fake)http requests
+    // params: options
     sendRequest(options): Promise<any>
     {
 
