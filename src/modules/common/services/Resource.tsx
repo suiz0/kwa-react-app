@@ -8,7 +8,6 @@ class Resource
     static interceptors = {
         request: function(){console.log("Before requesr")},
         response: function(){console.log("After response")},
-        validateExpiration: function(){console.log("validate response")}
     };
 
     constructor(options)
@@ -40,7 +39,6 @@ class Resource
             this.logRequest(options);
             setTimeout(() => {
                 Resource.interceptors.response();
-                Resource.interceptors.validateExpiration();
                
                 resolve(mockData);
             }, Resource.timeout);

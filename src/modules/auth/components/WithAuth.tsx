@@ -5,7 +5,7 @@ const withAuth = (WrappedComponent) => {
     return class extends React.Component {
         constructor(props)
         {
-            super(props);
+            super(props);         
         }
         render() {
             return (<WrappedComponent {...this.props} auth={AuthAPIProvider.create()}  />

@@ -72,7 +72,6 @@ class AuthAPI
         opts.type="get";
         opts.url = "/platformsettings/";
         General.Resource.mockData = platformSettings;
-        console.log('MockedData', General.Resource.mockData);
         return this.resource.sendRequest(opts);
     }
 
@@ -89,7 +88,6 @@ class AuthAPI
 
             console.log("Applying Auth Headers for subsequent requests");
             this.resource.setGetHeaders(GetAuthHeaders());
-
             return response;
         })
         .catch((response) => {
