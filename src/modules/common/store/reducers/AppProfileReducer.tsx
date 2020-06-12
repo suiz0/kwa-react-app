@@ -19,12 +19,12 @@ export default (state, action) => {
                 isLoading: true
             };
             break;
-        case "STOP_LOADING":
+        case actions.STOP_LOADING:
             newState = {
                 ...state,
                 isLoading: false
             }
-            break;      
+            break;
 
         default:
             newState= !state ? initialState: state;
